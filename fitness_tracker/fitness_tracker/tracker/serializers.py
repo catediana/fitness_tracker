@@ -1,5 +1,21 @@
 from rest_framework import serializers
 from .models import Activity
+from django.contrib.auth.models import User
+
+# 1 . user registration endpoint
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']  # We're only using username and password for registration
+
+    def create(self, validated_data):
+        # This method creates the user and hashes the password automatically
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password']
+        )
+        return user
+
 
 class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
