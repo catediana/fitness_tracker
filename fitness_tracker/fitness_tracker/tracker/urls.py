@@ -1,12 +1,14 @@
-from django.urls import path, include
+
+from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import ActivityViewSet
+from .views import ActivityViewSet, RegisterView
 
-
-# urls to route the API endpoints
 router = DefaultRouter()
-router.register(r'activities', ActivityViewSet)
+router.register(r'activities', ActivityViewSet, basename='activities')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('register/', RegisterView.as_view(), name='register'),
 ]
+
+# Add the router-generated URLs
+urlpatterns += router.urls

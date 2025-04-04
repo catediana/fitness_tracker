@@ -12,7 +12,8 @@ class UserSerializer(serializers.ModelSerializer):
         # This method creates the user and hashes the password automatically
         user = User.objects.create_user(
             username=validated_data['username'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            Email=validated_data['email']
         )
         return user
 
