@@ -6,14 +6,14 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password']  # We're only using username and password for registration
+        fields = ['username', 'password','email']  
 
     def create(self, validated_data):
         # This method creates the user and hashes the password automatically
         user = User.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-            Email=validated_data['email']
+            email=validated_data['email']
         )
         return user
 
