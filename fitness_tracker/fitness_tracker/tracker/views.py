@@ -13,6 +13,8 @@ from .serializers import UserSerializer
 from rest_framework import generics
 from rest_framework.status import HTTP_201_CREATED
 from django_filters import rest_framework as filters
+from rest_framework.permissions import IsAdminUser
+
 # 1. register view to Return a Token After Registration
 
 class RegisterView(generics.CreateAPIView):
@@ -78,3 +80,13 @@ class ActivityHistoryView(generics.ListAPIView):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
     filterset_class = ActivityFilter
+
+
+# 5. view for admin dashboard where admin can monitor users and activities
+class AdminDashboardView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        users = User.objects.all()
+        activities = Activity.objects.all()
+        return Response({'users': list(users.values()), 'activities': list(activities.values())})
