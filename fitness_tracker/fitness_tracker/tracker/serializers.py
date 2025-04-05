@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Activity
+from .models import Activity ,ExerciseType
 from django.contrib.auth.models import User
 
 # 1 . user registration endpoint
@@ -16,10 +16,15 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email']
         )
         return user
-
+    
+# 2. serializers
+class ExerciseTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExerciseType
+        fields = ['id', 'name']
 
 class ActivitySerializer(serializers.ModelSerializer):
+    exercise_type = ExerciseTypeSerializer()
     class Meta:
         model = Activity
-        fields = ['id', 'type_of_exercise', 'duration', 'distance', 'calories_burned', 'date', 'user']
-        read_only_fields = ['user', 'date']  
+        fields = ['id', 'exercise_type', 'duration', 'date','distance']
