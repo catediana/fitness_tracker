@@ -10,5 +10,4 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
 ]
 
-# Add the router-generated URLs
 urlpatterns += router.urls
