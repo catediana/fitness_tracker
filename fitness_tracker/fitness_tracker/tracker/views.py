@@ -12,37 +12,8 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from rest_framework import generics
 from rest_framework.status import HTTP_201_CREATED
-
-# 1. views that handle the CRUD operations (Create, Read, Update, Delete) for Activity.
-class ActivityListView(APIView):
-    def get(self, request):
-        activities = Activity.objects.all()
-        serializer = ActivitySerializer(activities, many=True)
-        return Response(serializer.data)
-    
-
-class ActivityViewSet(viewsets.ModelViewSet):
-    queryset = Activity.objects.all()
-    serializer_class = ActivitySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
-    
-    # secured the API  to Ensure that only authenticated users can create, view, update, or delete their activities.
-    class ActivityView(APIView):
-         permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        activities = Activity.objects.filter(user=request.user)
-        # Serialize and return the activities
-        return Response({'activities': list(activities.values())})
-
-
-# 2. register view to Return a Token After Registration
+from django_filters import rest_framework as filters
+# 1. register view to Return a Token After Registration
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -64,4 +35,46 @@ class RegisterView(generics.CreateAPIView):
 
 
 
+# 2. views that handle the CRUD operations (Create, Read, Update, Delete) for Activity.
+class ActivityListView(APIView):
+    def get(self, request):
+        activities = Activity.objects.all()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+    
 
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+    
+    # securing the API  to Ensure that only authenticated users can create, view, update, or delete their activities.
+    class ActivityView(APIView):
+         permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        activities = Activity.objects.filter(user=request.user)
+        return Response({'activities': list(activities.values())})
+
+
+# 3.# filter and sort view 
+
+class ActivityFilter(filters.FilterSet):
+    type_of_exercise = filters.CharFilter(field_name='exercise_type__name')
+    order_by = filters.OrderingFilter(fields=('date', 'duration', 'distance'))
+
+    class Meta:
+        model = Activity
+        fields = ['type_of_exercise', 'date', 'duration']
+
+# 4. Activity history view to view detailed history of logged activities
+class ActivityHistoryView(generics.ListAPIView):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    filterset_class = ActivityFilter
