@@ -2,6 +2,24 @@
 
 A RESTful API built with Django and Django REST Framework (DRF) for tracking users' physical activities. Users can log exercises, view detailed activity history with filters and sorting, and admins can monitor all user activities.
 
+EXAMPLE
+Content-Type: application/json
+Authorization: Token
+{
+  "username": "oscar",
+  "password": "oscar123",
+  "email": "oscarmutama@gmail.com"
+}
+
+{
+  "exercise_type": "swimming",
+  "duration": "00:35:00",
+  "distance": 1200,
+  "calories_burned": 250
+}
+
+
+
 # Features
 
 - User registration & authentication
