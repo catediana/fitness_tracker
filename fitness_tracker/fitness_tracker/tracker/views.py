@@ -31,6 +31,15 @@ class ActivityViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+    
+    # secured the API  to Ensure that only authenticated users can create, view, update, or delete their activities.
+    class ActivityView(APIView):
+         permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        activities = Activity.objects.filter(user=request.user)
+        # Serialize and return the activities
+        return Response({'activities': list(activities.values())})
 
 
 # 2. register view to Return a Token After Registration
