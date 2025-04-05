@@ -24,7 +24,7 @@ class ExerciseTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class ActivitySerializer(serializers.ModelSerializer):
-    exercise_type = ExerciseTypeSerializer()
     class Meta:
         model = Activity
-        fields = ['id', 'exercise_type', 'duration', 'date','distance']
+        fields = '__all__'
+        read_only_fields = ['user', 'date'] 

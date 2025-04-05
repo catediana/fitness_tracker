@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.status import HTTP_201_CREATED
 from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAdminUser
@@ -20,24 +22,32 @@ from rest_framework.permissions import IsAdminUser
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]  
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # Generating a token for the new user
         token, created = Token.objects.get_or_create(user=user)
 
         return Response({
             "message": "User registered successfully!",
             "token": token.key  
         }, status=HTTP_201_CREATED)
+    
+# 2. ActivityCreateView where users can log their fitness activities 
+
+class ActivityCreateView(generics.CreateAPIView):
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
-
-
-# 2. views that handle the CRUD operations (Create, Read, Update, Delete) for Activity.
+# 3. views that handle the CRUD operations (Create, Read, Update, Delete) for Activity.
 class ActivityListView(APIView):
     def get(self, request):
         activities = Activity.objects.all()
@@ -65,7 +75,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
         return Response({'activities': list(activities.values())})
 
 
-# 3.# filter and sort view 
+# 4. filter and sort view 
 
 class ActivityFilter(filters.FilterSet):
     type_of_exercise = filters.CharFilter(field_name='exercise_type__name')
@@ -75,7 +85,7 @@ class ActivityFilter(filters.FilterSet):
         model = Activity
         fields = ['type_of_exercise', 'date', 'duration']
 
-# 4. Activity history view to view detailed history of logged activities
+# 5. Activity history view to view detailed history of logged activities
 class ActivityHistoryView(generics.ListAPIView):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
