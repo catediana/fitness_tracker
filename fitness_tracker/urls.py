@@ -16,15 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
 from rest_framework.authtoken.views import obtain_auth_token
 
-# Include the app URLs in the main fitness_tracker urls.py
+def welcome_view(request):
+    return JsonResponse({
+        "message": "Welcome to the Fitness Tracker API. Visit /api/register/ to get started."
+    })
 
 urlpatterns = [
+    path('', welcome_view),
     path('admin/', admin.site.urls),
-    path('api/', include('tracker.urls')), 
+    path('api/', include('tracker.urls')),
     path('api/login/', obtain_auth_token, name='api_token_auth'),
 ]
-
-
-
