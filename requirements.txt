@@ -47,3 +47,4 @@ djangorestframework==3.16.0
 django-filter==25.1
 django-extensions==3.2.3
 psycopg2-binary==2.9.10
+whitenoise==6.9.0
