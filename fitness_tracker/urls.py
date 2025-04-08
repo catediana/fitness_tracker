@@ -21,7 +21,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 def welcome_view(request):
     return JsonResponse({
-        "message": "Welcome to the Fitness Tracker API. Visit /api/register/ to get started."
+        "message": "Welcome to the Fitness Tracker API. Visit http://127.0.0.1:8000/api/register/ to get started."
     })
 
 urlpatterns = [
