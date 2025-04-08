@@ -45,3 +45,4 @@ django-environ==0.12.0
 dj-database-url==2.3.0
 djangorestframework==3.16.0
 django-filter==25.1
+django-extensions==3.2.3
