@@ -21,7 +21,25 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 def welcome_view(request):
     return JsonResponse({
-        "message": "Welcome to the Fitness Tracker API. Visit http://127.0.0.1:8000/api/register/ to get started."
+        "message": """
+        Welcome to the Fitness Tracker API.
+
+        To get started, visit the following links:
+
+        1. Register: http://127.0.0.1:8000/api/register/
+        2. Activities: http://127.0.0.1:8000/api/activities/
+
+        The available activities include:
+
+        1. Log a new fitness activity.
+        2. Get all activities for a logged-in user.
+        3. Retrieve a specific activity.
+        4. Update an activity.
+        5. Delete an activity.
+        6. View activity history.
+
+        Enjoy tracking your fitness goals!
+        """
     })
 
 urlpatterns = [
