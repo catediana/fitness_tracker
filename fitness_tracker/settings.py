@@ -37,12 +37,13 @@ DEBUG = env.bool("DEBUG", default=False)
 print(f"DEBUG is: {DEBUG}")
 
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "fitness-tracker-api-8a07.onrender.com"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "fitness-tracker-api-8a07.onrender.com",".vercel.app", ".now.sh"])
 
 CSRF_TRUSTED_ORIGINS = [
     "https://fitness-tracker-api-8a07.onrender.com",
     "http://localhost",
     "http://127.0.0.1",
+    "https://fitness_tracker.vercel.app"
 ]
 
 
