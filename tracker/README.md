@@ -1,73 +1,100 @@
-# Fitness Tracker API
 
-A RESTful API built with Django and Django REST Framework (DRF) for tracking users' physical activities. Users can log exercises, view detailed activity history with filters and sorting, and admins can monitor all user activities.
+Fitness Tracker
+A full-stack web application designed to help users track their fitness activities and monitor their progress towards personal goals. The project consists of a dynamic front-end dashboard built with HTML, CSS, and JavaScript, and a secure back-end API powered by Django and Django REST Framework.
 
-EXAMPLE
-Content-Type: application/json
-Authorization: Token
-{
-  "username": "oscar",
-  "password": "oscar123",
-  "email": "oscarmutama@gmail.com"
-}
+Table of Contents
+Features
 
-{
-  "exercise_type": "swimming",
-  "duration": "00:35:00",
-  "distance": 1200,
-  "calories_burned": 250
-}
+Technologies Used
 
+Installation and Setup
 
+Project Structure
 
-# Features
+API Endpoints
 
-- User registration & authentication
-- Log physical activities with:
-  - Type of exercise
-  - Duration
-  - Distance
-  - Calories burned
-  - Timestamp
-- View personal activity history with filters and sorting
-- Admin dashboard to view all users and activities
-- Secure access (only view/edit your own data)
-- Django admin support
-- Unit tests for key functionality
+Contributing
 
-##  API Endpoints
+License
 
-| Endpoint | Method | Description |
-|---------|--------|-------------|
-| `/api/register/` | POST | Register new user |
-| `/api/login/` | POST | User login |
-| `/api/activities/` | GET/POST | List or create user activities |
-| `/api/activities/<id>/` | GET/PUT/DELETE | Retrieve, update, or delete an activity |
-| `/api/activities/history/` | GET | Filtered and sorted user activity history |
-| `/api/admin/dashboard/` | GET | View all users and activities (admin only) |
+1. Features
+User Management: Secure user registration and login.
 
-###  Filtering & Sorting
-Available filters:
+Dashboard: A personalized overview displaying key fitness metrics.
 
-   1.type_of_exercise
-   2.date
-   3.duration
+Total workouts, calories burned, and total exercise time.
 
-Sort by:
+Visual progress bar for weekly calorie goals.
 
-  1.date
-  2.duration
-  3.distance
+Interactive bar chart to visualize weekly activity.
 
-## Security
-1.Authentication required for all activity endpoints
-2.Only the activity owner can update/delete
-3.Admin-only access to dashboard
+Responsive table of recent activities.
+
+Activity Logging: Users can add new fitness activities with details such as exercise type, duration, distance, and calories burned.
+
+Data Visualization: Charts and graphs provide insightful visual summaries of fitness data.
+
+Responsive Design: The entire application is optimized for use on desktops, tablets, and mobile devices.
+
+2. Technologies Used
+Front-End:
+
+HTML5: Structure of the web pages.
+
+CSS3: Styling and responsiveness.
+
+JavaScript (ES6+): Client-side logic, data fetching, and DOM manipulation.
+
+Chart.js: Library for creating dynamic and responsive charts.
+
+Back-End:
+
+Python 3: The primary programming language.
+
+Django: The high-level Python web framework used for the application's core logic.
+
+Django REST Framework (DRF): A powerful toolkit for building the RESTful API.
+
+SQLite: The default database used for development. 
 
 
-## Tests
-Tests cover:
-    1.User registration and login
-    2.Activity creation
-    3.Unauthorized access checks
+3. Project Structure
+fitness-tracker/
+├── venv/                       # Python virtual environment
+├── fitness_tracker_project/    # Main Django project directory
+│   ├── settings.py             # Django settings
+│   ├── urls.py                 # Main URL routing
+│   └── ...
+├── fitness_app/                # Django app for core functionality
+│   ├── models.py               # Database models (User, Activity, etc.)
+│   ├── views.py                # Django views and API views
+│   ├── urls.py                 # App-specific URL routing
+│   ├── serializers.py          # DRF serializers for API data
+│   └── ...
+├── templates/                  # HTML templates
+│   ├── index.html              # The main dashboard page
+│   ├── login.html              # Login page
+│   ├── register.html           # Registration page
+│   └── ...
+├── static/                     # CSS, JS, and image files
+│   ├── css/
+│   ├── js/
+│   └── img/
+├── manage.py                   # Django's command-line utility
+├── requirements.txt            # Python dependencies
+└── README.md                   # This file
+4. API Endpoints
+The API is served by the Django REST Framework. Here are some of the key endpoints:
+
+Endpoint	Method	Description	Authentication
+/api/register/	POST	Create a new user account.	None
+/api/login/	POST	Authenticate and get an auth token.	None
+/api/dashboard/	GET	Retrieve user's dashboard data and stats.	Token
+/api/activities/	GET	List all user's activities.	Token
+/api/activities/	POST	Create a new activity.	Token
+/api/activities/<int:pk>/	GET	Retrieve a single activity by ID.	Token
+/api/activities/<int:pk>/	PUT/PATCH	Update an activity.	Token
+/api/activities/<int:pk>/	DELETE	Delete an activity.	Token
+/api/history/  GET the history of you activities
+
 

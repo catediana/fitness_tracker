@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitQuest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #F5F7F7;
+            background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438") no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- Top Navbar Styles --- */
+        .top-nav {
+            background: rgba(121, 3, 29, 0.95);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #F5F7F7;
+        }
+        
+        .top-nav .site-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .top-nav .site-info h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #F5F7F7;
+            text-decoration: none;
+            margin: 0;
+        }
+        
+        .top-nav .site-info p {
+            font-size: 0.8rem;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .top-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+        }
+        .top-nav a {
+            color: #F5F7F7;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .top-nav a:hover {
+            color: #EDB518;
+        }
+
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 6rem 2rem;
+            color: #F5F7F7;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(121, 3, 29, 0.5); 
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 0;
+        }
+        
+        .hero h2, .hero p, .hero .btn {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 1.5rem; }
+
+
+        .btn {
+            background: #EDB518;
+            color: #000407;
+            padding: 0.7rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #79031D;
+            color: #F5F7F7;
+        }
+        
+        .glass-panel {
+            background: rgba(121, 3, 29, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 10px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center the content inside the panel */
+        }
+
+
+        .glass-panel h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #F5F7F7;
+        }
+        
+        /* New Testimonial Styles */
+        .testimonials {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .testimonial {
+            background: rgba(0, 4, 7, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            backdrop-filter: blur(6px);
+            text-align: left;
+        }
+        .testimonial:hover {
+            transform: translateY(-10px);
+        }
+        .testimonial p {
+            font-style: italic;
+        }
+        .testimonial .author {
+            font-weight: bold;
+            color: #EDB518;
+            margin-top: 1rem;
+            display: block;
+        }
+        /* End Testimonial Styles */
+
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature {
+            background: rgba(0, 4, 7, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            backdrop-filter: blur(6px);
+        }
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+        .feature img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .feature h3 {
+            color: #EDB518;
+        }
+
+
+        footer {
+            background: rgba(121, 3, 29, 0.95);
+            color: #F5F7F7;
+            text-align: center;
+            padding: 1rem;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="site-info">
+            <h1>GoalFlex</h1>
+            <p>Built By Sweat. Powered by you</p>
+        </div>
+        <ul>
+            <li><a href="#about-us">About Us</a></li>
+            <li><a href="{% url 'login_page' %}">Login</a></li>
+            <li><a href="{% url 'register_page' %}">Register</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+
+    <footer>
+        <p>&copy; 2025 GoalFlex | <a href="#">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,516 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block extra_styles %}
+<style>
+  /* Dashboard container styles */
+  .dashboard-container {
+    background: rgba(121, 3, 29, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    width: 85%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    color: #F5F7F7;
+  }
+  h1 {
+    color: #F5F7F7;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  /* Profile summary */
+  .profile-summary {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(245, 247, 247, 0.3);
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+  .profile-summary h2 {
+    color: #EDB518;
+    margin-bottom: 1rem;
+  }
+  /* Profile picture */
+  .profile-picture-container {
+    margin-bottom: 20px;
+  }
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #EDB518;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  /* Stats cards */
+  .stats-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    flex: 1;
+    min-width: 160px;
+    margin-bottom: 10px;
+    transition: transform 0.2s;
+    color: #F5F7F7;
+  }
+  .stat-card:hover {
+    transform: translateY(-3px);
+  }
+  .stat-card h3 {
+    margin: 0 0 10px;
+    color: #EDB518;
+  }
+  .stat-card p {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    color: #F5F7F7;
+  }
+  /* Goal tracking */
+  .goal-tracking {
+    margin-bottom: 30px;
+    color: #F5F7F7;
+  }
+  .progress-bar {
+    width: 80%;
+    height: 25px;
+    background: rgba(245, 247, 247, 0.2);
+    border-radius: 12.5px;
+    overflow: hidden;
+    margin: 10px auto;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #EDB518, #f7d54c);
+    transition: width 0.5s ease-in-out;
+  }
+  /* Chart */
+  .chart-container {
+    margin-bottom: 30px;
+    position: relative;
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    color: #F5F7F7;
+  }
+  #myChart {
+    max-height: 400px;
+    width: 100%;
+  }
+  .chart-controls {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .chart-controls button {
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(237, 181, 24, 0.5);
+    color: #F5F7F7;
+    font-weight: bold;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+  }
+  .chart-controls button:hover,
+  .chart-controls button.active {
+    background: #EDB518;
+    color: #000407;
+  }
+  /* Table */
+  .recent-activities {
+    margin-top: 2rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    overflow: hidden;
+    color: #F5F7F7;
+  }
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(237, 181, 24, 0.3);
+  }
+  th {
+    background: rgba(121, 3, 29, 0.7);
+    color: #F5F7F7;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  /* Sections hidden by default */
+  #profileSection,
+  #statsSection,
+  #goalSection {
+    display: none;
+  }
+  /* Mobile table */
+  @media (max-width: 600px) {
+    table { border: 0; }
+    table thead { display: none; }
+    table tr {
+      display: block;
+      margin-bottom: 1rem;
+      background: rgba(245, 247, 247, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    table td {
+      display: block;
+      text-align: right;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(237, 181, 24, 0.3);
+      position: relative;
+      padding-left: 50%;
+      color: #F5F7F7;
+    }
+    table td:last-child { border-bottom: 0; }
+    table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 1rem;
+      font-weight: bold;
+      color: #EDB518;
+      text-align: left;
+    }
+  }
+  /* Button */
+  .button-link button {
+    padding: 12px 20px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #EDB518, #f7c94c);
+    color: #000407;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .button-link button:hover {
+    background: linear-gradient(135deg, #79031D, #a30529);
+    color: #F5F7F7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  .button-link {
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h1 id="welcomeHeading">Welcome!</h1>
+  <!-- Profile Section -->
+  <section id="profileSection" class="dashboard-section">
+    <div class="profile-summary">
+      <h2>Your Profile</h2>
+      <div class="profile-picture-container">
+        <img id="profilePicture" src="" alt="Profile Picture" class="profile-pic" />
+      </div>
+      <div class="stats-cards">
+        <div class="stat-card">
+          <h3>Gender</h3>
+          <p id="profileGender">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Age</h3>
+          <p id="profileAge">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Height</h3>
+          <p id="profileHeight">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Weight</h3>
+          <p id="profileWeight">-</p>
+        </div>
+        <div class="stat-card">
+          <h3>Goal</h3>
+          <p id="profileGoal">-</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Stats Section -->
+  <section id="statsSection" class="dashboard-section">
+    <div class="stats-cards">
+      <div class="stat-card">
+        <h3>Total Workouts</h3>
+        <p id="totalWorkouts">-</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Calories Burned</h3>
+        <p id="totalCalories">-</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Time Exercised</h3>
+        <p id="totalTime">-</p>
+      </div>
+    </div>
+  </section>
+  <!-- Goal Section -->
+  <section id="goalSection" class="dashboard-section">
+    <div class="goal-tracking">
+      <h3>Weekly Calorie Goal</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" id="goalProgressBar"></div>
+      </div>
+      <p><span id="goalProgressText">Loading...</span></p>
+    </div>
+  </section>
+  <!-- Chart Section -->
+  <div class="chart-container">
+    <div class="chart-header">
+      <h3>Activity Progress</h3>
+      <div class="chart-controls">
+        <button data-period="weekly" class="active">Weekly</button>
+        <button data-period="monthly">Monthly</button>
+        <button data-period="yearly">Yearly</button>
+      </div>
+    </div>
+    <canvas id="myChart"></canvas>
+  </div>
+  <!-- Recent Activities Section -->
+  <div class="recent-activities">
+    <h3>Recent Activities</h3>
+    <table id="recentActivitiesTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Activity</th>
+          <th>Distance (km)</th>
+          <th>Duration (min)</th>
+          <th>Calories</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <a href="{% url 'activities_page' %}" class="button-link">
+    <button>+ Add New Activity</button>
+  </a>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let myChartInstance = null;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sections = {
+      profileSection: document.getElementById("profileSection"),
+      statsSection: document.getElementById("statsSection"),
+      goalSection: document.getElementById("goalSection"),
+    };
+    Object.values(sections).forEach(section => section.style.display = "none");
+    sections.profileSection.style.display = "block";
+
+    const dashboardSubitems = document.querySelectorAll("#dashboardSubmenu button.nav-subitem");
+    dashboardSubitems.forEach(btn => btn.classList.remove('active'));
+    if(dashboardSubitems.length > 0) dashboardSubitems[0].classList.add('active');
+
+    dashboardSubitems.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        if (!targetId || !sections[targetId]) return;
+        Object.entries(sections).forEach(([id, section]) => {
+          section.style.display = (id === targetId) ? "block" : "none";
+        });
+        dashboardSubitems.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    const periodButtons = document.querySelectorAll('.chart-controls button');
+    periodButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        periodButtons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        fetchDashboardData(event.target.dataset.period);
+      });
+    });
+    fetchDashboardData('weekly');
+  });
+
+  async function fetchDashboardData(period = 'weekly') {
+    const token = localStorage.getItem("token");
+    const welcomeHeading = document.getElementById("welcomeHeading");
+    const tableBody = document.getElementById("recentActivitiesTable").querySelector("tbody");
+    const profilePicElement = document.getElementById("profilePicture");
+    const totalWorkouts = document.getElementById("totalWorkouts");
+    const totalCalories = document.getElementById("totalCalories");
+    const totalTime = document.getElementById("totalTime");
+    const goalProgressBar = document.getElementById("goalProgressBar");
+    const goalProgressText = document.getElementById("goalProgressText");
+
+    if (!token) {
+      welcomeHeading.innerText = "Please log in to view your dashboard.";
+      profilePicElement.src = "{% static 'images/placeholder_profile_pic.png' %}";
+      document.getElementById("profileGender").innerText = '-';
+      document.getElementById("profileAge").innerText = '-';
+      document.getElementById("profileHeight").innerText = '-';
+      document.getElementById("profileWeight").innerText = '-';
+      document.getElementById("profileGoal").innerText = '-';
+      totalWorkouts.innerText = '-';
+      totalCalories.innerText = '-';
+      totalTime.innerText = '-';
+      goalProgressText.innerText = 'Login to set a goal!';
+      goalProgressBar.style.width = '0%';
+      initializeChart(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], [0, 0, 0, 0, 0, 0, 0]);
+      tableBody.innerHTML = '<tr><td colspan="5">Please login to view your dashboard.</td></tr>';
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/dashboard/?period=${period}`, {
+        headers: { "Authorization": `Token ${token}` }
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem("token");
+          window.location.href = "{% url 'login_page' %}";
+        }
+        throw new Error(`HTTP error ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.profile) {
+        document.getElementById("profileGender").innerText = data.profile.gender || 'N/A';
+        document.getElementById("profileAge").innerText = data.profile.age || 'N/A';
+        document.getElementById("profileHeight").innerText = `${data.profile.height || 'N/A'} ${data.profile.height_unit}`;
+        document.getElementById("profileWeight").innerText = `${data.profile.weight || 'N/A'} ${data.profile.weight_unit}`;
+        document.getElementById("profileGoal").innerText = data.profile.fitness_goal || 'N/A';
+
+        const profilePhotoPath = data.profile.profile_photo || "";
+        let profilePhotoUrl = "{% static 'images/placeholder_profile_pic.png' %}";
+        if (profilePhotoPath) {
+          if (profilePhotoPath.startsWith("http://") || profilePhotoPath.startsWith("https://")) {
+            profilePhotoUrl = profilePhotoPath;
+          } else {
+            profilePhotoUrl = "/media/" + profilePhotoPath;
+          }
+        }
+        profilePicElement.src = profilePhotoUrl;
+
+      } else {
+        document.getElementById("profileGender").innerText = 'N/A';
+        document.getElementById("profileAge").innerText = 'N/A';
+        document.getElementById("profileHeight").innerText = 'N/A';
+        document.getElementById("profileWeight").innerText = 'N/A';
+        document.getElementById("profileGoal").innerText = 'N/A';
+        profilePicElement.src = "{% static 'images/placeholder_profile_pic.png' %}";
+      }
+
+      if (data.username) {
+        welcomeHeading.innerText = `Welcome, ${data.username}!`;
+      } else {
+        welcomeHeading.innerText = "Welcome!";
+      }
+
+      totalWorkouts.innerText = data.total_workouts || 0;
+      totalCalories.innerText = `${data.total_calories || 0} kcal`;
+      totalTime.innerText = `${data.total_time_minutes || 0} min`;
+
+      const goalProgress = data.goal_progress || 0;
+      goalProgressBar.style.width = `${goalProgress}%`;
+      goalProgressText.innerText = `You are ${goalProgress}% of the way to your goal!`;
+
+      initializeChart(data.chart_labels, data.chart_data);
+
+      tableBody.innerHTML = '';
+      if (data.recent_activities?.length > 0) {
+        data.recent_activities.slice(0, 5).forEach(activity => {
+          const activityDate = new Date(activity.date);
+          const formattedDate = activityDate.toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
+          });
+          const formattedTime = activityDate.toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit', timeZone: 'UTC'
+          });
+          tableBody.innerHTML += `<tr>
+            <td data-label="Date">${formattedDate} at ${formattedTime}</td>
+            <td data-label="Activity">${activity.exercise_type}</td>
+            <td data-label="Distance (km)">${activity.distance}</td>
+            <td data-label="Duration (min)">${activity.duration}</td>
+            <td data-label="Calories">${activity.calories_burned}</td>
+          </tr>`;
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="5">No recent activities found.</td></tr>';
+      }
+    } catch (err) {
+      console.error("Error loading dashboard:", err);
+      welcomeHeading.innerText = "Failed to load dashboard data. Please try again later.";
+    }
+  }
+
+  function initializeChart(labels, data) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    if (myChartInstance) {
+      myChartInstance.destroy();
+    }
+    myChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Calories Burned',
+          data: data,
+          backgroundColor: 'rgba(237, 181, 24, 0.6)',
+          borderColor: '#EDB518',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            min: 0,
+            max: 3000,
+            grid: { color: 'rgba(245, 247, 247, 0.2)' },
+            ticks: { color: '#F5F7F7' }
+          },
+          x: {
+            grid: { color: 'rgba(245, 247, 247, 0.2)' },
+            ticks: { color: '#F5F7F7' }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: '#F5F7F7' }
+          }
+        }
+      }
+    });
+  }
+</script>
+{% endblock script %}

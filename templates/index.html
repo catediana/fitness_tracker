@@ -1,0 +1,61 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="hero">
+        <h2>Track Your Fitness. Stay Motivated.</h2>
+        <p>Log your workouts, monitor progress, and achieve your goals — all in one place.</p>
+        <a href="{% url 'register_page' %}" class="btn">Get Started</a>
+    </section>
+
+    <div class="container">
+        <section class="glass-panel" id="about-us">
+            <h2>About Us</h2>
+            <p>At GoalFlex, we believe that tracking your fitness should be simple and motivating. Our platform is designed to help you stay accountable, visualize your progress, and crush your goals, whether you're a seasoned athlete or just starting your journey. We are a community of dedicated individuals, forging stronger bodies and healthier lives together.</p>
+        </section>
+
+        <section class="glass-panel">
+            <h2>Core Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Dashboard</h3>
+                    <img src="{% static 'images/dashboard.jpg' %}" alt="Dashboard image">
+                    <p>Visualize your progress over time with intuitive charts and metrics.</p>
+                </div>
+                <div class="feature">
+                    <h3>Activities</h3>
+                    <img src="{% static 'images/activities.jpg' %}" alt="Activities image">
+                    <p>Easily log your workouts, from running to weightlifting, with detailed status.</p>
+                </div>
+                <div class="feature">
+                    <h3>Goals</h3>
+                    <img src="{% static 'images/goals.jpg' %}" alt="Goals image">
+                    <p>Set, track, and achieve your personal fitness targets with a clear roadmap.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel">
+            <h2>What Our Users Are Saying</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"This app has completely changed how I approach my workouts. The dashboard is incredibly motivating!"</p>
+                    <span class="author">— Alex P., Marathon Runner</span>
+                </div>
+                <div class="testimonial">
+                    <p>"I love how simple it is to log my activities. The clean interface makes it a joy to use."</p>
+                    <span class="author">— Jamie L., Weightlifter</span>
+                </div>
+                <div class="testimonial">
+                    <p>"Setting my goals in FitForge made them feel real. I finally hit my target weight thanks to this tool!"</p>
+                    <span class="author">— Jordan B., Yoga Enthusiast</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel">
+            <h2>Ready to start your fitness journey?</h2>
+            <a href="{% url 'register_page' %}" class="btn">Join Now</a>
+        </section>
+    </div>
+{% endblock %}

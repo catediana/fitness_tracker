@@ -1,0 +1,228 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /*
+    This CSS has been updated to match the "glass panel" effect and color scheme
+    of the homepage, using the dark red and transparent backgrounds for
+    a cohesive look.
+    */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 12rem);
+    }
+
+    .login-container {
+        /* Updated background to match the glass-panel on the homepage */
+        background: rgba(121, 3, 29, 0.75);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: 2rem;
+        border-radius: 10px; /* Adjusted border-radius to match homepage */
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Adjusted shadow to match homepage */
+        width: 360px;
+        text-align: center;
+        color: #F5F7F7; /* Matched body text color from base_public.html */
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        color: #F5F7F7; /* Matched body text color */
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        margin: 0.5rem 0 0.2rem;
+        font-size: 0.9rem;
+        color: #f1f1f1;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 0.4rem 0 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        /* Updated input background to match the dark glass panels on the homepage */
+        background: rgba(0, 4, 7, 0.5);
+        color: #F5F7F7; /* Matched body text color */
+        outline: none;
+    }
+
+    input::placeholder {
+        color: #ddd;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .checkbox-container input {
+        width: auto;
+        margin-right: 0.5rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #EDB518; /* Matched homepage btn color */
+        color: #000407; /* Matched homepage btn color */
+        border: none;
+        border-radius: 5px; /* Matched homepage btn border-radius */
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: #79031D; /* Matched homepage btn hover color */
+        color: #F5F7F7; /* Matched homepage btn hover color */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .message {
+        margin-top: 1rem;
+        font-size: 14px;
+    }
+
+    .success {
+        color: #90ee90;
+    }
+
+    .error {
+        color: #ff6b6b;
+    }
+
+    .auth-link {
+        margin-top: 1rem;
+        color: #f1f1f1;
+        font-size: 0.9rem;
+    }
+
+    .auth-link a {
+        color: #EDB518; /* Matched homepage link color */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .auth-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm" method="post" action="{% url 'login_page' %}">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="show-password-toggle">
+                <label for="show-password-toggle">Show Password</label>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+        <p class="message" id="result"></p>
+        <p class="auth-link" style="margin-bottom: 0.5rem;">
+            <a href="#">Forgot Password?</a>
+        </p>
+        <p class="auth-link">
+            Don't have an account? <a href="{% url 'register_page' %}">Register now</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // --- New password toggle logic ---
+    const passwordInput = document.getElementById("password");
+    const showPasswordCheckbox = document.getElementById("show-password-toggle");
+
+    showPasswordCheckbox.addEventListener("change", function() {
+        if (this.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    });
+
+    // --- Form submission logic with loading state and better error handling ---
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const result = document.getElementById("result");
+        const submitButton = this.querySelector('button[type="submit"]');
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Logging In...";
+        result.textContent = "";
+
+        try {
+            const response = await fetch("/api/login/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                result.textContent = data.message || "Login successful!";
+                result.className = "message success";
+                localStorage.setItem("token", data.token);
+
+                // Check for user profile to determine next page
+                const profileResponse = await fetch("/api/user-profile/", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Token ${data.token}`
+                    }
+                });
+
+                if (profileResponse.ok) {
+                    // Profile exists, redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = "{% url 'dashboard_page' %}";
+                    }, 1500);
+                } else {
+                    // No profile, redirect to onboarding page
+                    setTimeout(() => {
+                        window.location.href = "{% url 'onboarding_page' %}";
+                    }, 1500);
+                }
+            } else {
+                submitButton.disabled = false;
+                submitButton.textContent = "Login";
+                result.textContent = data.non_field_errors?.[0] || "Invalid credentials!";
+                result.className = "message error";
+            }
+        } catch (error) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Login";
+            result.textContent = "Network error. Please try again.";
+            result.className = "message error";
+        }
+    });
+</script>
+{% endblock %}

@@ -1,50 +1,30 @@
-"""
-URL configuration for fitness_tracker project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from django.http import JsonResponse
-from rest_framework.authtoken.views import obtain_auth_token
-
-def welcome_view(request):
-    return JsonResponse({
-        "message": """
-        Welcome to the Fitness Tracker API.
-
-        To get started, visit the following links:
-
-        1. Register: http://127.0.0.1:8000/api/register/
-        2. Activities: http://127.0.0.1:8000/api/activities/
-
-        The available activities include:
-
-        1. Log a new fitness activity.
-        2. Get all activities for a logged-in user.
-        3. Retrieve a specific activity.
-        4. Update an activity.
-        5. Delete an activity.
-        6. View activity history.
-
-        Enjoy tracking your fitness goals!
-        """
-    })
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views 
+from tracker import views as tracker_views 
 
 urlpatterns = [
-    path('', welcome_view),
+    # Frontend routes
+    path('', tracker_views.index_view, name='index'),
+    path('register/', tracker_views.register_view, name='register_page'),
+    path('login/', tracker_views.login_view, name='login_page'),
+    path('dashboard/', tracker_views.dashboard_view, name='dashboard_page'),
+    path('activities/', tracker_views.activities_view, name='activities_page'),
+    path('onboarding/', tracker_views.onboarding_view, name='onboarding_page'),
+
+    # Django admin
     path('admin/', admin.site.urls),
+
+    # Tracker app (API routes)
     path('api/', include('tracker.urls')),
-    path('api/login/', obtain_auth_token, name='api_token_auth'),
+
+    path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
+    
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

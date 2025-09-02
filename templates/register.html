@@ -1,0 +1,297 @@
+{% extends 'base_public.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /*
+    This CSS has been updated to match the "glass panel" effect and color scheme
+    of the homepage, using the dark red and transparent backgrounds for
+    a cohesive look.
+    */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 12rem);
+    }
+
+    .register-container {
+        /* Updated background to match the glass-panel on the homepage */
+        background: rgba(121, 3, 29, 0.75);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: 2rem;
+        border-radius: 10px; /* Adjusted border-radius to match homepage */
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Adjusted shadow to match homepage */
+        width: 360px;
+        text-align: center;
+        color: #F5F7F7; /* Matched body text color from base_public.html */
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    h1 {
+        margin-bottom: 1.5rem;
+        color: #F5F7F7; /* Matched body text color */
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        margin: 0.5rem 0 0.2rem;
+        font-size: 0.9rem;
+        color: #f1f1f1;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 0.4rem 0 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        /* Updated input background to match the dark glass panels on the homepage */
+        background: rgba(0, 4, 7, 0.5);
+        color: #F5F7F7; /* Matched body text color */
+        outline: none;
+    }
+
+    input::placeholder {
+        color: #ddd;
+    }
+
+    /* Styles for the password strength meter */
+    #password-strength-meter {
+        height: 8px;
+        border-radius: 5px;
+        transition: width 0.3s ease-in-out;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+        background-color: transparent;
+    }
+
+    .strength-text {
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-align: right;
+        margin-top: 0.2rem;
+    }
+    
+    .strength-weak { background-color: #ff6b6b; width: 33%; }
+    .strength-moderate { background-color: #f7c94c; width: 66%; }
+    .strength-strong { background-color: #90ee90; width: 100%; }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .checkbox-container input {
+        width: auto;
+        margin-right: 0.5rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #EDB518; /* Matched homepage btn color */
+        color: #000407; /* Matched homepage btn color */
+        border: none;
+        border-radius: 5px; /* Matched homepage btn border-radius */
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: #79031D; /* Matched homepage btn hover color */
+        color: #F5F7F7; /* Matched homepage btn hover color */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .message {
+        margin-top: 1rem;
+        font-size: 14px;
+    }
+
+    .success {
+        color: #90ee90;
+    }
+
+    .error {
+        color: #ff6b6b;
+    }
+
+    .auth-link {
+        margin-top: 1rem;
+        color: #f1f1f1;
+        font-size: 0.9rem;
+    }
+
+    .auth-link a {
+        color: #EDB518; /* Matched homepage link color */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .auth-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="register-container">
+        <h1>Create Account</h1>
+        <form id="registerForm" method="post" action="{% url 'register_page' %}">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <div id="password-strength-bar"></div>
+            <div id="password-strength-text" class="strength-text"></div>
+
+            <label for="password_confirm">Confirm Password</label>
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirm Password" required>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="show-password-toggle">
+                <label for="show-password-toggle">Show Passwords</label>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+        <p class="message" id="result"></p>
+        <p class="auth-link">
+            Already have an account? <a href="{% url 'login_page' %}">Login here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // --- New password toggle logic ---
+    const passwordInput = document.getElementById("password");
+    const passwordConfirmInput = document.getElementById("password_confirm");
+    const showPasswordCheckbox = document.getElementById("show-password-toggle");
+
+    showPasswordCheckbox.addEventListener("change", function() {
+        if (this.checked) {
+            passwordInput.type = "text";
+            passwordConfirmInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+            passwordConfirmInput.type = "password";
+        }
+    });
+
+    // --- New password strength meter logic ---
+    const strengthBar = document.getElementById("password-strength-bar");
+    const strengthText = document.getElementById("password-strength-text");
+
+    passwordInput.addEventListener("input", function() {
+        const password = this.value;
+        let strength = 0;
+        if (password.length > 0) {
+            strengthText.style.display = 'block';
+        } else {
+            strengthText.style.display = 'none';
+        }
+
+        if (password.length >= 8) strength++; // Length check
+        if (password.match(/[a-z]/)) strength++; // Lowercase letters
+        if (password.match(/[A-Z]/)) strength++; // Uppercase letters
+        if (password.match(/[0-9]/)) strength++; // Numbers
+        if (password.match(/[^A-Za-z0-9]/)) strength++; // Special characters
+
+        let strengthLevel = "";
+        let barClass = "";
+
+        if (strength < 2) {
+            strengthLevel = "Very Weak";
+            barClass = "strength-weak";
+        } else if (strength < 4) {
+            strengthLevel = "Moderate";
+            barClass = "strength-moderate";
+        } else {
+            strengthLevel = "Strong";
+            barClass = "strength-strong";
+        }
+
+        strengthText.textContent = strengthLevel;
+        strengthBar.className = barClass;
+    });
+
+    // --- Your existing form submission logic ---
+    document.getElementById("registerForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const password = document.getElementById("password").value;
+        const passwordConfirm = document.getElementById("password_confirm").value;
+        const result = document.getElementById("result");
+        const submitButton = this.querySelector('button[type="submit"]');
+
+        if (password !== passwordConfirm) {
+            result.textContent = "Passwords do not match!";
+            result.className = "message error";
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Registering...";
+
+        try {
+            const response = await fetch("/api/register/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: document.getElementById("username").value,
+                    email: document.getElementById("email").value,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                result.textContent = data.message;
+                result.className = "message success";
+                localStorage.setItem('token', data.token);
+
+                setTimeout(() => {
+                    window.location.href = "{% url 'login_page' %}";
+                }, 2000);
+
+            } else {
+                submitButton.disabled = false;
+                submitButton.textContent = "Register";
+                if (data.username && data.username.includes("already exists")) {
+                    result.textContent = "Username already exists. Please choose another one.";
+                } else if (data.email && data.email.includes("already exists")) {
+                    result.textContent = "Email already exists. Please use a different one.";
+                } else if (data.password && data.password.includes("This password is too short")) {
+                    result.textContent = "This password is too short. It must contain at least 8 characters.";
+                } else if (data.password && data.password.includes("The password is too common")) {
+                    result.textContent = "This password is too common. Please choose a different one.";
+                } else {
+                    result.textContent = data.message || "An error occurred during registration.";
+                }
+                result.className = "message error";
+            }
+        } catch (error) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Register";
+            result.textContent = "Network error. Please try again.";
+            result.className = "message error";
+        }
+    });
+</script>
+{% endblock %}

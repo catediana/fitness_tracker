@@ -1,0 +1,370 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Center the form vertically with consistent text color */
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 12rem);
+        color: #fff;
+    }
+
+    .form-container {
+        background: rgba(121, 3, 29, 0.75); /* Using your maroon glass-panel color */
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+        color: #F5F7F7;
+    }
+
+    .form-container h1 {
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #F5F7F7;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        box-sizing: border-box;
+    }
+    
+    .form-group input.error, .form-group select.error {
+        border: 2px solid #ff6b6b; /* Highlight input with a red border on error */
+    }
+
+    .form-group input::placeholder,
+    .form-group select option {
+        color: #ccc;
+    }
+    
+    .error-message {
+        color: #ff6b6b;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+        display: none; /* Hidden by default */
+    }
+
+    .form-group input[type="file"] {
+        border: none;
+        background: transparent;
+    }
+
+    .form-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23fff'%3e%3cpath d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    .form-group select option {
+        color: #000;
+    }
+
+    .units-group {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .units-group input {
+        flex-grow: 1;
+    }
+
+    .units-group select {
+        width: auto;
+        min-width: 80px;
+    }
+
+    .profile-photo-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #EDB518;
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #EDB518, #f7d54c);
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #79031D, #a30529);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    .submit-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .message-container {
+        margin-top: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .message-success {
+        color: #90ee90;
+    }
+
+    .message-error {
+        color: #ff6b6b;
+    }
+    
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 2rem 1rem;
+        }
+    }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h1>Welcome! Tell us a little about you.</h1>
+        <form id="onboardingForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="profilePhoto">Profile Photo</label>
+                <input type="file" id="profilePhoto" accept="image/*" />
+                <img id="photoPreview" class="profile-photo-preview" src="#" alt="Profile Photo Preview" />
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" required autocomplete="sex">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <p class="error-message" id="gender-error"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" min="1" max="120" placeholder="Enter your age" required autocomplete="bday" />
+                <p class="error-message" id="age-error"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="height">Height</label>
+                <div class="units-group">
+                    <input type="number" id="height" step="1" placeholder="Enter your height" required autocomplete="height" />
+                    <select id="heightUnit">
+                        <option value="cm">cm</option>
+                        <option value="inches">in</option>
+                    </select>
+                </div>
+                <p class="error-message" id="height-error"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Current Weight</label>
+                <div class="units-group">
+                    <input type="number" id="weight" step="0.1" placeholder="Enter your weight" required autocomplete="weight" />
+                    <select id="weightUnit">
+                        <option value="kg">kg</option>
+                        <option value="lbs">lbs</option>
+                    </select>
+                </div>
+                <p class="error-message" id="weight-error"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="fitnessGoal">Your Main Goal</label>
+                <select id="fitnessGoal" required autocomplete="on">
+                    <option value="">Select a Goal</option>
+                    <option value="Lose Weight">Lose Weight</option>
+                    <option value="Maintain Weight">Maintain Weight</option>
+                    <option value="Build Muscle">Build Muscle</option>
+                    <option value="Improve Endurance">Improve Endurance</option>
+                </select>
+                <p class="error-message" id="fitnessGoal-error"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="activityLevel">Activity Level</label>
+                <select id="activityLevel" required autocomplete="on">
+                    <option value="">Select Activity Level</option>
+                    <option value="Sedentary">Sedentary</option>
+                    <option value="Lightly Active">Lightly Active</option>
+                    <option value="Moderately Active">Moderately Active</option>
+                    <option value="Very Active">Very Active</option>
+                    <option value="Extra Active">Extra Active</option>
+                </select>
+                <p class="error-message" id="activityLevel-error"></p>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Profile</button>
+        </form>
+        <div id="messageContainer" class="message-container"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const onboardingForm = document.getElementById('onboardingForm');
+        const profilePhotoInput = document.getElementById('profilePhoto');
+        const photoPreview = document.getElementById('photoPreview');
+        const messageContainer = document.getElementById('messageContainer');
+        const submitBtn = document.querySelector('.submit-btn');
+
+        // Function to clear all error messages
+        const clearErrors = () => {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('input.error, select.error').forEach(el => {
+                el.classList.remove('error');
+            });
+            messageContainer.textContent = '';
+            messageContainer.className = 'message-container';
+        };
+
+        // Function to display specific errors
+        const displayErrors = (errors) => {
+            clearErrors();
+            for (const key in errors) {
+                const errorElement = document.getElementById(`${key}-error`);
+                if (errorElement) {
+                    errorElement.textContent = errors[key].join(' ');
+                    errorElement.style.display = 'block';
+                }
+                const inputElement = document.getElementById(key);
+                if (inputElement) {
+                    inputElement.classList.add('error');
+                }
+            }
+        };
+
+        // Show a preview of the selected photo
+        profilePhotoInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                photoPreview.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        onboardingForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            clearErrors();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                messageContainer.textContent = 'Please log in to complete your profile.';
+                messageContainer.className = 'message-container message-error';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Profile';
+                return;
+            }
+
+            const formData = new FormData();
+            const profilePhoto = profilePhotoInput.files[0];
+
+            // Append all form data to FormData object
+            formData.append('gender', document.getElementById('gender').value);
+            formData.append('age', document.getElementById('age').value);
+            formData.append('height', document.getElementById('height').value);
+            formData.append('height_unit', document.getElementById('heightUnit').value);
+            formData.append('weight', document.getElementById('weight').value);
+            formData.append('weight_unit', document.getElementById('weightUnit').value);
+            formData.append('fitness_goal', document.getElementById('fitnessGoal').value);
+            formData.append('activity_level', document.getElementById('activityLevel').value);
+            if (profilePhoto) {
+                formData.append('profile_photo', profilePhoto);
+            }
+
+            try {
+                const response = await fetch('/api/user-profile/', {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": `Token ${token}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    messageContainer.textContent = 'Profile saved successfully';
+                    messageContainer.className = 'message-container message-success';
+
+                    setTimeout(() => {
+                        window.location.href = "{% url 'dashboard_page' %}";
+                    }, 2000);
+
+                } else {
+                    const errorData = await response.json();
+                    if (errorData) {
+                        displayErrors(errorData);
+                        messageContainer.textContent = 'Please fix the errors above and try again.';
+                    } else {
+                        messageContainer.textContent = 'Failed to save profile. An unknown error occurred.';
+                    }
+                    messageContainer.className = 'message-container message-error';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Save Profile';
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                messageContainer.textContent = 'An error occurred. Please try again later.';
+                messageContainer.className = 'message-container message-error';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Profile';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,445 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block extra_styles %}
+<style>
+  .activities-container {
+    background: rgba(121, 3, 29, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 85%;
+    max-width: 1000px;
+    color: #F5F7F7;
+  }
+  h1, h2 {
+    color: #F5F7F7;
+    text-shadow: none;
+  }
+  h3 {
+    color: #EDB518;
+  }
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .exercise-card {
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+    color: #F5F7F7;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+  }
+  .exercise-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .exercise-card.selected {
+    border-color: #EDB518;
+    box-shadow: 0 0 10px rgba(237, 181, 24, 0.5);
+  }
+  .exercise-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+    margin-bottom: 0.5rem;
+  }
+  .exercise-card p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    text-align: left;
+    color: #F5F7F7;
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(237, 181, 24, 0.3);
+  }
+  th {
+    background: rgba(121, 3, 29, 0.7);
+    color: #F5F7F7;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  .message-box {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+  }
+  .success {
+    background: rgba(40,167,69,0.8);
+    color: #fff;
+  }
+  .error {
+    background: rgba(220,53,69,0.8);
+    color: #fff;
+  }
+  .category-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .category-button {
+    padding: 10px 20px;
+    background-color: #f2f2f2;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #000;
+  }
+  .category-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .category-button.selected-cat {
+    background: #79031D;
+    color: #F5F7F7;
+    border-color: #EDB518;
+    box-shadow: 0 0 10px rgba(237, 181, 24, 0.5);
+  }
+  .exercise-grid-container {
+    display: none;
+  }
+  .form-panel {
+    background: rgba(245, 247, 247, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 1.5rem;
+    text-align: left;
+    color: #F5F7F7;
+  }
+  .form-panel h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #EDB518;
+  }
+  .form-panel label {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    display: block;
+    color: #F5F7F7;
+  }
+  .form-panel input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(237, 181, 24, 0.3);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    box-sizing: border-box;
+  }
+  .form-panel input::placeholder {
+    color: #ccc;
+  }
+  .form-panel button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #EDB518, #f7d54c);
+    color: #000407;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+  .form-panel button:hover {
+    background: linear-gradient(135deg, #79031D, #a30529);
+    color: #F5F7F7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="activities-container">
+  <section id="logActivitySection">
+    <h1>Log New Activity</h1>
+    <div id="message" class="message-box" style="display:none;"></div>
+    <div class="log-activity-section">
+      <h3>Choose a Category</h3>
+      <div id="category-container" class="category-container"></div>
+      <div id="exercise-grid-container" class="exercise-grid-container">
+        <h3 id="exercise-heading">Select Your Activity(s)</h3>
+        <div id="exercise-grid" class="exercise-grid"></div>
+      </div>
+      <div class="form-panel" style="margin-top: 1.5rem;">
+        <h3>Enter Details</h3>
+        <form id="activityForm">
+          <label for="distance">Distance (km):</label>
+          <input type="number" id="distance" name="distance" />
+          <label for="caloriesBurned">Calories Burned (kcal):</label>
+          <input type="number" id="caloriesBurned" name="caloriesBurned" />
+          <label for="duration">Duration (minutes):</label>
+          <input type="number" id="duration" name="duration" />
+          <button type="submit">Add Activity</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="activityHistorySection" style="margin-top: 3rem;">
+    <h1>Your Activities</h1>
+    <table id="activitiesTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type(s)</th>
+          <th>Distance (km)</th>
+          <th>Duration (min)</th>
+          <th>Calories</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5">No activities found. Log one to get started!</td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  const activitiesTableBody = document.querySelector("#activitiesTable tbody");
+  const messageElement = document.getElementById("message");
+  const exerciseGridContainer = document.getElementById("exercise-grid-container");
+  const exerciseGrid = document.getElementById("exercise-grid");
+  const categoryContainer = document.getElementById("category-container");
+  const activityForm = document.getElementById("activityForm");
+  let allExercises = [];
+
+  function showMessage(msg, type) {
+    messageElement.textContent = msg;
+    messageElement.className = `message-box ${type}`;
+    messageElement.style.display = 'block';
+    setTimeout(() => { messageElement.style.display = 'none'; }, 5000);
+  }
+
+  async function populateExercises() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      categoryContainer.innerHTML = '<p>Please login to select an activity.</p>';
+      return;
+    }
+    try {
+      const response = await fetch("/api/exercises/", { headers: { "Authorization": `Token ${token}` } });
+      if (response.ok) {
+        allExercises = await response.json();
+        const categories = [...new Set(allExercises.map(ex => ex.category_name))].sort();
+        categoryContainer.innerHTML = '';
+        categories.forEach(cat => {
+          const button = document.createElement("button");
+          button.className = "category-button";
+          button.textContent = cat;
+          button.dataset.category = cat;
+          categoryContainer.appendChild(button);
+        });
+        categoryContainer.addEventListener('click', handleCategorySelection);
+      } else {
+        categoryContainer.innerHTML = '<p>Failed to load exercises. Please try again later.</p>';
+      }
+    } catch (error) {
+      console.error("Failed to load exercises:", error);
+      categoryContainer.innerHTML = '<p>Failed to load exercises. Please try again later.</p>';
+    }
+  }
+
+  function handleCategorySelection(e) {
+    const button = e.target.closest('.category-button');
+    if (!button) return;
+    document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected-cat'));
+    button.classList.add('selected-cat');
+    const selectedCategory = button.dataset.category;
+    const filteredExercises = allExercises.filter(ex => ex.category_name === selectedCategory);
+    exerciseGridContainer.style.display = 'block';
+    const iconMap = {
+      'Running': "{% static 'images/running.jpg' %}",
+      'Cycling': "{% static 'images/cycling.jpg' %}",
+      'Swimming': "{% static 'images/swimming.jpg' %}",
+      'Bench Press': "{% static 'images/bench-press.jpg' %}",
+      'Bicep Curls': "{% static 'images/bicep-curls.jpg' %}",
+      'HIIT': "{% static 'images/hiit.jpg' %}",
+      'Dancing/Zumba': "{% static 'images/dancing.jpg' %}",
+      'Deadlifts': "{% static 'images/deadlifts.jpg' %}",
+      'Jump Rope': "{% static 'images/jump-rope.jpg' %}",
+      'Lunges': "{% static 'images/lunges.jpg' %}",
+      'Plank Hold': "{% static 'images/plank-hold.jpg' %}",
+      'Push-up': "{% static 'images/pushup.jpg' %}",
+      'Squats': "{% static 'images/squats.jpg' %}",
+      'placeholder': "{% static 'images/placeholder.png' %}",
+      'Single-Leg Stand': "{% static 'images/singlelegstands.jpg' %}",
+      'Heel-to-Toe Walk': "{% static 'images/heeltotoewalk.jpg' %}",
+      'Bosu Ball Balance': "{% static 'images/bosuballbalance.jpg' %}",
+      'Side Leg Raises': "{% static 'images/sidelegraises.jpg' %}",
+      'Tai Chi Movements': "{% static 'images/taichimovements.jpg' %}",
+      'Sit-ups / Crunches': "{% static 'images/situps.jpg' %}",
+      'Russian Twists': "{% static 'images/russiantwists.jpg' %}",
+      'Mountain Climbers': "{% static 'images/mountainclimbers.jpg' %}",
+      'Leg Raises': "{% static 'images/legraises.jpg' %}",
+      'Bicycle Crunches': "{% static 'images/bicyclecrunches.jpg' %}",
+      'Long-distance Running': "{% static 'images/longdistancerunning.jpg' %}",
+      'Rowing': "{% static 'images/rowing.jpg' %}",
+      'Stair Climbing': "{% static 'images/stairclimbing.jpg' %}",
+      'Hiking': "{% static 'images/hiking.jpg' %}",
+      'Swimming Laps': "{% static 'images/swimminglaps.jpg' %}",
+      'Yoga Poses': "{% static 'images/yogaposes.jpg' %}",
+      'Hamstring Stretch': "{% static 'images/hamstringstretch.jpg' %}",
+      'Quadriceps Stretch': "{% static 'images/quadricepstretch.jpg' %}",
+      'Shoulder Stretch': "{% static 'images/shoulderstretch.jpg' %}",
+      'Cat-Cow Stretch': "{% static 'images/catcowstretch.jpg' %}",
+      'Arm Circles': "{% static 'images/armcircles.jpg' %}",
+      'Hip Circles': "{% static 'images/hipcircles.jpg' %}",
+      'Shoulder Rolls': "{% static 'images/shoulderolls.jpg' %}",
+      'Ankle Circles': "{% static 'images/anklecircles.jpg' %}",
+      'Dynamic Lunges': "{% static 'images/dynamiclunges.jpg' %}",
+
+      
+
+    };
+    exerciseGrid.innerHTML = '';
+    filteredExercises.forEach(ex => {
+      const card = document.createElement("div");
+      card.className = "exercise-card";
+      card.dataset.id = ex.id;
+      card.dataset.name = ex.name;
+      const iconUrl = iconMap[ex.name] || "{% static 'images/placeholder.png' %}";
+      card.innerHTML = `<img src="${iconUrl}" alt="${ex.name}"><p>${ex.name}</p>`;
+      exerciseGrid.appendChild(card);
+    });
+  }
+
+  exerciseGrid.addEventListener("click", function (e) {
+    const card = e.target.closest('.exercise-card');
+    if (card) {
+      card.classList.toggle('selected');
+      const selectedCards = document.querySelectorAll('.exercise-card.selected');
+      const selectedIds = Array.from(selectedCards).map(c => c.dataset.id);
+      activityForm.dataset.selectedExerciseIds = JSON.stringify(selectedIds);
+    }
+  });
+
+  async function fetchActivities() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      activitiesTableBody.innerHTML = '<tr><td colspan="5">Please login to view activities.</td></tr>';
+      return;
+    }
+    try {
+      const response = await fetch("/api/activities/", { headers: { "Authorization": `Token ${token}` } });
+      if (response.ok) {
+        const activities = await response.json();
+        activitiesTableBody.innerHTML = '';
+        if (activities.length === 0) {
+          activitiesTableBody.innerHTML = '<tr><td colspan="5">No activities found. Log one to get started!</td></tr>';
+        } else {
+          activities.forEach(activity => {
+            const exerciseNames = activity.exercise_types.map(ex => ex.name).join(', ');
+            const row = `
+              <tr>
+                <td>${new Date(activity.date).toLocaleDateString()}</td>
+                <td>${exerciseNames}</td>
+                <td>${activity.distance || '0'}</td>
+                <td>${activity.duration || '0'}</td>
+                <td>${activity.calories_burned || '0'}</td>
+              </tr>`;
+            activitiesTableBody.innerHTML += row;
+          });
+        }
+      } else {
+        showMessage("Failed to fetch activities.", 'error');
+      }
+    } catch (error) {
+      console.error("Error fetching activities:", error);
+      showMessage("An error occurred while loading activities.", 'error');
+    }
+  }
+
+  activityForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    const selectedExerciseIds = JSON.parse(activityForm.dataset.selectedExerciseIds || '[]');
+    if (!token || selectedExerciseIds.length === 0) {
+      showMessage("Please select at least one activity and login first!", 'error');
+      return;
+    }
+    const distance = document.getElementById("distance").value;
+    const caloriesBurned = document.getElementById("caloriesBurned").value;
+    const duration = document.getElementById("duration").value;
+    const date = new Date().toISOString().split('T')[0];
+    try {
+      const response = await fetch("/api/activities/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Token ${token}`
+        },
+        body: JSON.stringify({
+          exercise_types_ids: selectedExerciseIds.map(id => parseInt(id)),
+          distance: parseFloat(distance) || null,
+          calories_burned: parseInt(caloriesBurned) || null,
+          duration: parseInt(duration) || null,
+          date: date
+        })
+      });
+      if (response.ok) {
+        showMessage("Activity logged successfully!", 'success');
+        activityForm.reset();
+        document.querySelectorAll('.exercise-card.selected').forEach(card => card.classList.remove('selected'));
+        delete activityForm.dataset.selectedExerciseIds;
+        fetchActivities();
+        setTimeout(() => {
+          window.location.href = "{% url 'dashboard_page' %}";
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        const errorMessage = Object.values(errorData).flat().join(' ');
+        showMessage(`Failed to log activity: ${errorMessage}`, 'error');
+      }
+    } catch (error) {
+      console.error("Error logging activity:", error);
+      showMessage("An error occurred while logging the activity.", 'error');
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    populateExercises();
+    fetchActivities();
+  });
+</script>
+{% endblock %}

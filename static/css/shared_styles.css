@@ -1,0 +1,278 @@
+
+/* Color variables for consistency */
+:root {
+  --primary-maroon: rgba(121, 3, 29, 0.95);
+  --primary-maroon-transparent: rgba(121, 3, 29, 0.75);
+  --primary-maroon-light: rgba(121, 3, 29, 0.5);
+  --highlight-yellow: #EDB518;
+  --highlight-yellow-light: #f7d54c;
+  --text-light: #F5F7F7;
+  --text-dark: #000407;
+  --glass-blur: 6px;
+  --sidebar-width: 250px;
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  color: var(--text-light);
+  background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Glass panel effect */
+.glass-panel, 
+.dashboard-container,
+.form-container,
+.activities-container,
+.form-panel,
+.stat-card {
+  background: rgba(121, 3, 29, 0.75);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: var(--text-light);
+}
+
+/* Links and buttons */
+a.btn,
+.button-link button,
+.submit-btn {
+  background: linear-gradient(135deg, var(--highlight-yellow), var(--highlight-yellow-light));
+  color: var(--text-dark);
+  padding: 0.7rem 1.5rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+}
+
+a.btn:hover,
+.button-link button:hover,
+.submit-btn:hover {
+  background: var(--primary-maroon);
+  color: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Headers */
+h1, h2, h3 {
+  color: var(--text-light);
+}
+
+h2, h3 {
+  margin-bottom: 1rem;
+}
+
+/* Sidebar (for base_app.html) */
+.sidenav {
+  height: 100%;
+  width: var(--sidebar-width);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background: var(--primary-maroon);
+  padding-top: 2rem;
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.sidenav h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sidenav ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  margin: 0;
+}
+
+.sidenav li {
+  width: 100%;
+}
+
+.sidenav a,
+.sidenav button {
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidenav a:hover,
+.sidenav button:hover {
+  background: rgba(237, 181, 24, 0.2);
+  color: var(--highlight-yellow);
+}
+
+/* Tables and cards with glass style */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: left;
+  color: var(--text-light);
+  background: rgba(121, 3, 29, 0.7);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+th {
+  background: var(--primary-maroon);
+  color: var(--text-light);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Form inputs */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+  box-sizing: border-box;
+}
+
+input::placeholder,
+select option {
+  color: #ccc;
+}
+
+/* Profile pictures border */
+.profile-pic,
+.profile-photo-preview {
+  border: 2px solid var(--highlight-yellow);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border-radius: 50%;
+}
+
+/* Cards and stats */
+.stats-cards {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: rgba(121, 3, 29, 0.75);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  flex: 1;
+  min-width: 160px;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+  color: var(--text-light);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-card h3 {
+  color: var(--highlight-yellow);
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* Progress bars with yellow gradient */
+.progress-bar {
+  width: 80%;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12.5px;
+  overflow: hidden;
+  margin: 10px auto;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, var(--highlight-yellow), var(--highlight-yellow-light));
+  transition: width 0.5s ease-in-out;
+}
+
+/* Testimonials and features styles */
+.testimonial, .feature {
+  background: rgba(0, 4, 7, 0.5);
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+  backdrop-filter: blur(var(--glass-blur));
+  text-align: left;
+  color: var(--text-light);
+}
+
+.testimonial:hover, .feature:hover {
+  transform: translateY(-10px);
+}
+
+.testimonial p {
+  font-style: italic;
+}
+
+.testimonial .author, .feature h3 {
+  font-weight: bold;
+  color: var(--highlight-yellow);
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidenav {
+    transform: translateX(-100%);
+  }
+  .sidenav.open {
+    transform: translateX(0);
+  }
+  .main-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* Utility color for errors and success */
+.message-success {
+  color: #90ee90;
+}
+
+.message-error {
+  color: #ff6b6b;
+}
