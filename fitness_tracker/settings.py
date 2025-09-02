@@ -31,13 +31,19 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-18@8x$mb@3ltd#
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = env.bool("DEBUG", default=False)
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=False)
+#DEBUG = True
 
 print(f"DEBUG is: {DEBUG}")
 
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "fitness-tracker-api-8a07.onrender.com"])
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://fitness-tracker-api-8a07.onrender.com",
+    "http://localhost",
+    "http://127.0.0.1",
+]
 
 
 
