@@ -34,16 +34,15 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-18@8x$mb@3ltd#
 DEBUG = env.bool("DEBUG", default=False)
 #DEBUG = True
 
-print(f"DEBUG is: {DEBUG}")
 
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost", "fitness-tracker-api-8a07.onrender.com",".vercel.app", ".now.sh"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost",".vercel.app", ".now.sh", "goalflex-ecru.vercel.app"])
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://fitness-tracker-api-8a07.onrender.com",
+
     "http://localhost",
     "http://127.0.0.1",
-    "https://fitness_tracker.vercel.app"
+     "https://goalflex-ecru.vercel.app",
 ]
 
 
@@ -181,8 +180,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("BASE_DIR is:", BASE_DIR)
-print("BASE_DIR:", BASE_DIR)
-print("MEDIA_ROOT:", MEDIA_ROOT)
-print("MEDIA_URL:", MEDIA_URL)
-
