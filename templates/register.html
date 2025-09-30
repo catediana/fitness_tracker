@@ -62,7 +62,7 @@
     }
 
     /* Styles for the password strength meter */
-    #password-strength-meter {
+    #password-strength-bar {
         height: 8px;
         border-radius: 5px;
         transition: width 0.3s ease-in-out;
@@ -77,7 +77,7 @@
         text-align: right;
         margin-top: 0.2rem;
     }
-    
+
     .strength-weak { background-color: #ff6b6b; width: 33%; }
     .strength-moderate { background-color: #f7c94c; width: 66%; }
     .strength-strong { background-color: #90ee90; width: 100%; }
@@ -178,7 +178,24 @@
 </div>
 
 <script>
-    // --- New password toggle logic ---
+    // --- CSRF token fetch function ---
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for(let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // --- Show password toggle ---
     const passwordInput = document.getElementById("password");
     const passwordConfirmInput = document.getElementById("password_confirm");
     const showPasswordCheckbox = document.getElementById("show-password-toggle");
@@ -193,7 +210,7 @@
         }
     });
 
-    // --- New password strength meter logic ---
+    // --- Password strength meter ---
     const strengthBar = document.getElementById("password-strength-bar");
     const strengthText = document.getElementById("password-strength-text");
 
@@ -205,12 +222,11 @@
         } else {
             strengthText.style.display = 'none';
         }
-
-        if (password.length >= 8) strength++; // Length check
-        if (password.match(/[a-z]/)) strength++; // Lowercase letters
-        if (password.match(/[A-Z]/)) strength++; // Uppercase letters
-        if (password.match(/[0-9]/)) strength++; // Numbers
-        if (password.match(/[^A-Za-z0-9]/)) strength++; // Special characters
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/)) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^A-Za-z0-9]/)) strength++;
 
         let strengthLevel = "";
         let barClass = "";
@@ -230,7 +246,8 @@
         strengthBar.className = barClass;
     });
 
-    // --- Your existing form submission logic ---
+
+    // --- Form submission with CSRF protection ---
     document.getElementById("registerForm").addEventListener("submit", async function(e) {
         e.preventDefault();
 
@@ -251,7 +268,10 @@
         try {
             const response = await fetch("/api/register/", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken 
+                },
                 body: JSON.stringify({
                     username: document.getElementById("username").value,
                     email: document.getElementById("email").value,
