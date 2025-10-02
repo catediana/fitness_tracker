@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoalFlex</title>
+    <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=2.0" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +23,7 @@
 
         /* --- Top Navbar Styles --- */
         .top-nav {
-            background: rgba(121, 3, 29, 0.95);
+            background: rgba(40, 65, 57, 0.95);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             padding: 1rem 2rem;
@@ -41,7 +42,10 @@
         .top-nav .site-info h1 {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #F5F7F7;
+            background: linear-gradient(135deg, #F8E794, #B86830);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
             margin: 0;
         }
@@ -66,7 +70,7 @@
             transition: color 0.3s;
         }
         .top-nav a:hover {
-            color: #EDB518;
+            color: #F8E794;
         }
 
 
@@ -95,7 +99,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(121, 3, 29, 0.5); 
+            background:rgba(40, 65, 57, 0.95);;
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             z-index: 0;
@@ -111,7 +115,7 @@
 
 
         .btn {
-            background: #EDB518;
+            background: #F8E794;
             color: #000407;
             padding: 0.7rem 1.5rem;
             text-decoration: none;
@@ -121,12 +125,12 @@
         }
         
         .btn:hover {
-            background: #79031D;
+            background: #284139;
             color: #F5F7F7;
         }
         
         .glass-panel {
-            background: rgba(121, 3, 29, 0.75);
+            background:  rgba(40, 65, 57, 0.95);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             border-radius: 10px;
@@ -169,7 +173,7 @@
         }
         .testimonial .author {
             font-weight: bold;
-            color: #EDB518;
+            color: #F8E794;
             margin-top: 1rem;
             display: block;
         }
@@ -201,12 +205,12 @@
             margin-bottom: 1rem;
         }
         .feature h3 {
-            color: #EDB518;
+            color: #F8E794;
         }
 
 
         footer {
-            background: rgba(121, 3, 29, 0.95);
+            background: rgba(40, 65, 57, 0.95);
             color: #F5F7F7;
             text-align: center;
             padding: 1rem;

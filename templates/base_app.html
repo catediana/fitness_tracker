@@ -5,17 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GoalFlex</title>
-    <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=2.0" />
     {% block extra_styles %}{% endblock %}
 
     <style>
         :root {
             --sidebar-width: 250px;
             --primary-text-color: #F5F7F7;
-            --secondary-text-color: #000407;
-            --primary-color: #EDB518;
-            --primary-dark-color: #79031D;
-            --glass-bg-dark: rgba(121, 3, 29, 0.95);
+            --secondary-text-color: #111A19;
+            --primary-color: #F8E794;
+            --primary-dark-color: #284139;
+            --glass-bg-dark: rgba(40, 65, 57, 0.95);
             --glass-blur: 6px;
             --submenu-animation-duration: 0.25s;
         }
@@ -24,7 +24,7 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            color: var(--secondary-text-color);
+            color: var(--primary-text-color);
             background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438") no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
@@ -158,7 +158,7 @@
             top: 1rem;
             left: 1rem;
             z-index: 1001;
-            background: rgba(121, 3, 29, 0.7);
+            background: rgba(40, 65, 57, 0.95);;
             color: var(--primary-text-color);
             border: none;
             padding: 0.5rem 1rem;
@@ -221,7 +221,7 @@
         /* Active menu item styles */
         .nav-item.active,
         .nav-subitem.active {
-            background: rgba(237, 181, 24, 0.4);
+            background: rgba(248, 231, 148, 0.4);
             color: var(--primary-dark-color);
         }
     </style>
@@ -231,32 +231,51 @@
     <div class="overlay" id="overlay" tabindex="-1"></div>
     <nav class="sidenav" id="sideNav" aria-label="Main navigation">
         <div class="site-info-sidenav">
-            <h1>GoalFlex</h1>
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h1>GoalFlex</h1>
+            </div>
             <p>Built By Sweat. Powered by you</p>
+            <div class="brand-accent"></div>
         </div>
         
         <ul>
             <li>
                 <button class="nav-item" aria-expanded="false" aria-controls="dashboardSubmenu" id="dashboardToggle" aria-haspopup="true">
-                    Dashboard <span aria-hidden="true">▸</span>
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                    <span class="nav-arrow" aria-hidden="true">▸</span>
                 </button>
                 <ul class="submenu" id="dashboardSubmenu" aria-labelledby="dashboardToggle">
-                    <li><button class="nav-subitem" data-target="profileSection" tabindex="-1">Profile</button></li>
-                    <li><button class="nav-subitem" data-target="statusSection" tabindex="-1">Status</button></li>
-                    <li><button class="nav-subitem" data-target="goalSection" tabindex="-1">Goal</button></li>
+                    <li><button class="nav-subitem" data-target="profileSection" tabindex="-1">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text">Profile</span>
+                    </button></li>
+                    <li><button class="nav-subitem" data-target="statusSection" tabindex="-1">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-text">Status</span>
+                    </button></li>
+                    <li><button class="nav-subitem" data-target="goalSection" tabindex="-1">
+                        <span class="nav-icon">🎯</span>
+                        <span class="nav-text">Goal</span>
+                    </button></li>
                 </ul>
             </li>
 
             <li>
                 <a href="{% url 'activities_page' %}" class="nav-item" id="activitiesLink">
-                    Activities
+                    <span class="nav-icon">🏃‍♂️</span>
+                    <span class="nav-text">Activities</span>
                 </a>
             </li>
 
             <li>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="nav-item">Logout</button>
+                    <button type="submit" class="nav-item">
+                        <span class="nav-icon">🚪</span>
+                        <span class="nav-text">Logout</span>
+                    </button>
                 </form>
             </li>
         </ul>

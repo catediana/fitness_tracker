@@ -1,13 +1,19 @@
 
-/* Color variables for consistency */
+/* Color variables for consistency - Natural Earth Palette */
 :root {
-  --primary-maroon: rgba(121, 3, 29, 0.95);
-  --primary-maroon-transparent: rgba(121, 3, 29, 0.75);
-  --primary-maroon-light: rgba(121, 3, 29, 0.5);
-  --highlight-yellow: #EDB518;
-  --highlight-yellow-light: #f7d54c;
+  --emerald-green: #284139;
+  --emerald-green-transparent: rgba(40, 65, 57, 0.95);
+  --emerald-green-light: rgba(40, 65, 57, 0.75);
+  --emerald-green-fade: rgba(40, 65, 57, 0.5);
+  --wasabi: #809076;
+  --wasabi-light: rgba(128, 144, 118, 0.8);
+  --creased-khaki: #F8E794;
+  --creased-khaki-light: rgba(248, 231, 148, 0.9);
+  --egyptian-earth: #B86830;
+  --egyptian-earth-light: rgba(184, 104, 48, 0.8);
+  --noir-de-vigne: #111A19;
   --text-light: #F5F7F7;
-  --text-dark: #000407;
+  --text-dark: #111A19;
   --glass-blur: 6px;
   --sidebar-width: 250px;
 }
@@ -34,7 +40,7 @@ body {
 .activities-container,
 .form-panel,
 .stat-card {
-  background: rgba(121, 3, 29, 0.75);
+  background: var(--emerald-green-light);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-radius: 10px;
@@ -46,7 +52,7 @@ body {
 a.btn,
 .button-link button,
 .submit-btn {
-  background: linear-gradient(135deg, var(--highlight-yellow), var(--highlight-yellow-light));
+  background: linear-gradient(135deg, var(--creased-khaki), var(--creased-khaki-light));
   color: var(--text-dark);
   padding: 0.7rem 1.5rem;
   text-decoration: none;
@@ -61,7 +67,7 @@ a.btn,
 a.btn:hover,
 .button-link button:hover,
 .submit-btn:hover {
-  background: var(--primary-maroon);
+  background: var(--emerald-green);
   color: var(--text-light);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
@@ -84,18 +90,80 @@ h2, h3 {
   z-index: 1000;
   top: 0;
   left: 0;
-  background: var(--primary-maroon);
-  padding-top: 2rem;
+  background: linear-gradient(180deg, var(--emerald-green) 0%, var(--emerald-green-transparent) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
   color: var(--text-light);
   display: flex;
   flex-direction: column;
-  align-items: center;
   transition: transform 0.3s ease;
+  border-right: 1px solid var(--wasabi-light);
 }
 
-.sidenav h1 {
-  margin-bottom: 2rem;
+/* Site info section styling */
+.site-info-sidenav {
+  padding: 2rem 1.5rem;
   text-align: center;
+  background: linear-gradient(135deg, var(--wasabi-light), rgba(128, 144, 118, 0.1));
+  border-bottom: 1px solid var(--wasabi-light);
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  animation: pulse 2s infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.site-info-sidenav h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--creased-khaki), var(--egyptian-earth-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.site-info-sidenav p {
+  font-size: 0.9rem;
+  color: rgba(245, 247, 247, 0.8);
+  margin: 0 0 1rem 0;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+.brand-accent {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--egyptian-earth), transparent);
+  border-radius: 2px;
+  margin: 0 auto;
+  width: 60%;
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
 }
 
 .sidenav ul {
@@ -103,26 +171,196 @@ h2, h3 {
   padding: 0;
   width: 100%;
   margin: 0;
+  flex: 1;
 }
 
 .sidenav li {
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .sidenav a,
 .sidenav button {
   padding: 1rem 1.5rem;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-light);
-  display: block;
-  transition: background 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  gap: 0.75rem;
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  min-width: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.nav-text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.nav-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.sidenav a::before,
+.sidenav button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--wasabi-light), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidenav a:hover::before,
+.sidenav button:hover::before {
+  left: 100%;
 }
 
 .sidenav a:hover,
 .sidenav button:hover {
-  background: rgba(237, 181, 24, 0.2);
-  color: var(--highlight-yellow);
+  background: linear-gradient(135deg, var(--wasabi-light), rgba(128, 144, 118, 0.1));
+  color: var(--creased-khaki);
+  transform: translateX(5px);
+  box-shadow: inset 3px 0 0 var(--egyptian-earth);
+}
+
+.sidenav a:hover .nav-icon,
+.sidenav button:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+.sidenav a:hover .nav-arrow,
+.sidenav button:hover .nav-arrow {
+  transform: rotate(90deg);
+  opacity: 1;
+}
+
+/* Submenu styling */
+.submenu {
+  background: linear-gradient(135deg, var(--noir-de-vigne), rgba(17, 26, 25, 0.3));
+  border-left: 3px solid var(--egyptian-earth);
+  margin-left: 1rem;
+  border-radius: 0 12px 12px 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateX(-10px);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.submenu.open {
+  max-height: 250px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-subitem {
+  padding: 0.8rem 1.5rem !important;
+  font-size: 0.9rem !important;
+  color: rgba(245, 247, 247, 0.8) !important;
+  border-left: 2px solid transparent !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  position: relative !important;
+}
+
+.nav-subitem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--egyptian-earth), transparent);
+  transition: width 0.3s ease;
+}
+
+.nav-subitem:hover {
+  background: linear-gradient(135deg, var(--wasabi-light), rgba(128, 144, 118, 0.1)) !important;
+  color: var(--creased-khaki) !important;
+  border-left-color: var(--egyptian-earth) !important;
+  transform: translateX(5px) !important;
+}
+
+.nav-subitem:hover::before {
+  width: 3px;
+}
+
+/* Menu toggle button */
+.menu-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  background: linear-gradient(135deg, var(--creased-khaki), var(--egyptian-earth-light));
+  color: var(--text-dark);
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, var(--egyptian-earth), var(--creased-khaki));
+}
+
+.menu-toggle:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.menu-toggle:active {
+  transform: scale(0.95) rotate(0deg);
+}
+
+.menu-toggle:focus {
+  outline: 2px solid var(--egyptian-earth);
+  outline-offset: 2px;
 }
 
 /* Tables and cards with glass style */
@@ -132,18 +370,18 @@ table {
   margin-top: 20px;
   text-align: left;
   color: var(--text-light);
-  background: rgba(121, 3, 29, 0.7);
+  background: var(--emerald-green-light);
   border-radius: 12px;
   overflow: hidden;
 }
 
 th, td {
   padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--wasabi-light);
 }
 
 th {
-  background: var(--primary-maroon);
+  background: var(--emerald-green);
   color: var(--text-light);
 }
 
@@ -171,7 +409,7 @@ select option {
 /* Profile pictures border */
 .profile-pic,
 .profile-photo-preview {
-  border: 2px solid var(--highlight-yellow);
+  border: 2px solid var(--egyptian-earth);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   border-radius: 50%;
 }
@@ -186,7 +424,7 @@ select option {
 }
 
 .stat-card {
-  background: rgba(121, 3, 29, 0.75);
+  background: var(--emerald-green-light);
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -202,7 +440,7 @@ select option {
 }
 
 .stat-card h3 {
-  color: var(--highlight-yellow);
+  color: var(--creased-khaki);
   margin-bottom: 10px;
 }
 
@@ -224,7 +462,7 @@ select option {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, var(--highlight-yellow), var(--highlight-yellow-light));
+  background: linear-gradient(135deg, var(--egyptian-earth), var(--creased-khaki));
   transition: width 0.5s ease-in-out;
 }
 
@@ -251,7 +489,7 @@ select option {
 
 .testimonial .author, .feature h3 {
   font-weight: bold;
-  color: var(--highlight-yellow);
+  color: var(--creased-khaki);
   margin-top: 1rem;
 }
 
@@ -259,12 +497,51 @@ select option {
 @media (max-width: 768px) {
   .sidenav {
     transform: translateX(-100%);
+    width: 280px;
   }
   .sidenav.open {
     transform: translateX(0);
   }
   .main-wrapper {
     margin-left: 0;
+  }
+  
+  .menu-toggle {
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .site-info-sidenav {
+    padding: 1.5rem 1rem;
+  }
+  
+  .logo-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .logo-icon {
+    font-size: 1.5rem;
+  }
+  
+  .site-info-sidenav h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidenav {
+    width: 100%;
+  }
+  
+  .nav-item {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .nav-subitem {
+    padding: 1rem 1.5rem !important;
   }
 }
 
