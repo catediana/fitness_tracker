@@ -9,13 +9,16 @@ load_dotenv()
 import environ
 import os
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialize environment variables
 env = environ.Env()
-environ.Env.read_env()
+env_path = os.path.join(BASE_DIR, '.env')
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
@@ -54,11 +57,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'django_extensions',
-    # 'corsheaders',
+    'ckeditor',
+    'ckeditor_uploader',
+    'cloudinary',
+    'cloudinary_storage',
+    
 ]
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,6 +76,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'fitness_tracker.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 
 TEMPLATES = [
     {
@@ -112,21 +123,30 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# --- Static Files ---
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# --- CKEditor Upload Path ---
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# --- Media Files ---
+if DEBUG:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # Use Cloudinary in production
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    MEDIA_URL = '/media/'
 
+# --- Cloudinary Configuration ---
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dkt12hzdm'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY', '637419457344564'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'sepBR6zDqk2znBELIfXVuS5Ew34'),
+)
 
-# Debug prints (remove later)
-print("BASE_DIR:", BASE_DIR)
-print("MEDIA_ROOT:", MEDIA_ROOT)
-print("MEDIA_URL:", MEDIA_URL)
+# Optional: If you’re using CLOUDINARY_URL in your .env, you can still keep this:
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")

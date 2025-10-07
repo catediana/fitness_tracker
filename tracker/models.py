@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
+
 
 
 # 1. model containing the type of exercise
@@ -45,7 +47,7 @@ class UserProfile(models.Model):
     weight_unit = models.CharField(max_length=10, default='kg')
     fitness_goal = models.CharField(max_length=50, null=True, blank=True)
     activity_level = models.CharField(max_length=50, null=True, blank=True)
-    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    profile_photo = CloudinaryField('image', null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
