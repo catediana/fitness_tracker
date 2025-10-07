@@ -1,6 +1,7 @@
 {% extends 'base_app.html' %}
 {% load static %}
 
+
 {% block extra_styles %}
 <style>
   .activities-container {
@@ -187,6 +188,7 @@
 </style>
 {% endblock %}
 
+
 {% block content %}
 <div class="activities-container">
   <section id="logActivitySection">
@@ -194,16 +196,18 @@
     <div id="message" class="message-box" style="display:none;"></div>
     <div class="log-activity-section">
       <h3>Choose a Category</h3>
+      <!-- Categories will be dynamically injected here by JS -->
       <div id="category-container" class="category-container"></div>
       <div id="exercise-grid-container" class="exercise-grid-container">
         <h3 id="exercise-heading">Select Your Activity(s)</h3>
+        <!-- Exercises will be dynamically injected here by JS -->
         <div id="exercise-grid" class="exercise-grid"></div>
       </div>
       <div class="form-panel" style="margin-top: 1.5rem;">
         <h3>Enter Details</h3>
         <form id="activityForm">
           <label for="distance">Distance (km):</label>
-          <input type="number" id="distance" name="distance" />
+          <input type="number" id="distance" name="distance" step="0.01" />
           <label for="caloriesBurned">Calories Burned (kcal):</label>
           <input type="number" id="caloriesBurned" name="caloriesBurned" />
           <label for="duration">Duration (minutes):</label>
@@ -213,6 +217,7 @@
       </div>
     </div>
   </section>
+
 
   <section id="activityHistorySection" style="margin-top: 3rem;">
     <h1>Your Activities</h1>
@@ -234,6 +239,7 @@
 </div>
 {% endblock %}
 
+
 {% block script %}
 <script>
   const activitiesTableBody = document.querySelector("#activitiesTable tbody");
@@ -244,12 +250,14 @@
   const activityForm = document.getElementById("activityForm");
   let allExercises = [];
 
+  // FIX 1: Use template literal for class name concatenation
   function showMessage(msg, type) {
     messageElement.textContent = msg;
     messageElement.className = `message-box ${type}`;
     messageElement.style.display = 'block';
     setTimeout(() => { messageElement.style.display = 'none'; }, 5000);
   }
+
 
   async function populateExercises() {
     const token = localStorage.getItem("token");
@@ -258,19 +266,28 @@
       return;
     }
     try {
+      // NOTE: Ensure your Django backend is running and the /api/exercises/ endpoint is secured with Token authentication
       const response = await fetch("/api/exercises/", { headers: { "Authorization": `Token ${token}` } });
       if (response.ok) {
         allExercises = await response.json();
+        // Extract unique category names
         const categories = [...new Set(allExercises.map(ex => ex.category_name))].sort();
+        
+        // Dynamically create category buttons
         categoryContainer.innerHTML = '';
-        categories.forEach(cat => {
-          const button = document.createElement("button");
-          button.className = "category-button";
-          button.textContent = cat;
-          button.dataset.category = cat;
-          categoryContainer.appendChild(button);
-        });
-        categoryContainer.addEventListener('click', handleCategorySelection);
+        if (categories.length > 0) {
+            categories.forEach(cat => {
+              const button = document.createElement("button");
+              button.className = "category-button";
+              button.textContent = cat;
+              button.dataset.category = cat;
+              categoryContainer.appendChild(button);
+            });
+            categoryContainer.addEventListener('click', handleCategorySelection);
+        } else {
+             categoryContainer.innerHTML = '<p>No exercise categories found. Have you run the populate script?</p>';
+        }
+
       } else {
         categoryContainer.innerHTML = '<p>Failed to load exercises. Please try again later.</p>';
       }
@@ -280,69 +297,92 @@
     }
   }
 
+
   function handleCategorySelection(e) {
     const button = e.target.closest('.category-button');
     if (!button) return;
+    
+    // UI update for category selection
     document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected-cat'));
     button.classList.add('selected-cat');
+    
     const selectedCategory = button.dataset.category;
     const filteredExercises = allExercises.filter(ex => ex.category_name === selectedCategory);
     exerciseGridContainer.style.display = 'block';
+
+    // FIX 2: Ensure all keys in iconMap match the Django exercise names exactly
     const iconMap = {
+      // Aerobic Exercises
       'Running': "{% static 'images/running.jpg' %}",
       'Cycling': "{% static 'images/cycling.jpg' %}",
       'Swimming': "{% static 'images/swimming.jpg' %}",
+      'Jump Rope': "{% static 'images/jump-rope.jpg' %}",
+      'HIIT': "{% static 'images/hiit.jpg' %}",
+      'Dancing / Zumba': "{% static 'images/dancing.jpg' %}",
+
+      // Strength Exercises
+      'Push-ups': "{% static 'images/pushup.jpg' %}",
+      'Squats': "{% static 'images/squats.jpg' %}",
+      'Lunges': "{% static 'images/lunges.jpg' %}",
+      'Deadlifts': "{% static 'images/deadlifts.jpg' %}",
       'Bench Press': "{% static 'images/bench-press.jpg' %}",
       'Bicep Curls': "{% static 'images/bicep-curls.jpg' %}",
-      'HIIT': "{% static 'images/hiit.jpg' %}",
-      'Dancing/Zumba': "{% static 'images/dancing.jpg' %}",
-      'Deadlifts': "{% static 'images/deadlifts.jpg' %}",
-      'Jump Rope': "{% static 'images/jump-rope.jpg' %}",
-      'Lunges': "{% static 'images/lunges.jpg' %}",
       'Plank Hold': "{% static 'images/plank-hold.jpg' %}",
-      'Push-up': "{% static 'images/pushup.jpg' %}",
-      'Squats': "{% static 'images/squats.jpg' %}",
-      'placeholder': "{% static 'images/placeholder.png' %}",
-      'Single-Leg Stand': "{% static 'images/singlelegstands.jpg' %}",
-      'Heel-to-Toe Walk': "{% static 'images/heeltotoewalk.jpg' %}",
-      'Bosu Ball Balance': "{% static 'images/bosuballbalance.jpg' %}",
-      'Side Leg Raises': "{% static 'images/sidelegraises.jpg' %}",
-      'Tai Chi Movements': "{% static 'images/taichimovements.jpg' %}",
-      'Sit-ups / Crunches': "{% static 'images/situps.jpg' %}",
-      'Russian Twists': "{% static 'images/russiantwists.jpg' %}",
-      'Mountain Climbers': "{% static 'images/mountainclimbers.jpg' %}",
-      'Leg Raises': "{% static 'images/legraises.jpg' %}",
-      'Bicycle Crunches': "{% static 'images/bicyclecrunches.jpg' %}",
-      'Long-distance Running': "{% static 'images/longdistancerunning.jpg' %}",
-      'Rowing': "{% static 'images/rowing.jpg' %}",
-      'Stair Climbing': "{% static 'images/stairclimbing.jpg' %}",
-      'Hiking': "{% static 'images/hiking.jpg' %}",
-      'Swimming Laps': "{% static 'images/swimminglaps.jpg' %}",
+
+      // Flexibility Exercises
       'Yoga Poses': "{% static 'images/yogaposes.jpg' %}",
       'Hamstring Stretch': "{% static 'images/hamstringstretch.jpg' %}",
       'Quadriceps Stretch': "{% static 'images/quadricepstretch.jpg' %}",
       'Shoulder Stretch': "{% static 'images/shoulderstretch.jpg' %}",
       'Cat-Cow Stretch': "{% static 'images/catcowstretch.jpg' %}",
+
+      // Balance Exercises
+      'Single-Leg Stand': "{% static 'images/singlelegstands.jpg' %}",
+      'Heel-to-Toe Walk': "{% static 'images/heeltotoewalk.jpg' %}",
+      'Bosu Ball Balance': "{% static 'images/bosuballbalance.jpg' %}",
+      'Side Leg Raises': "{% static 'images/sidelegraises.jpg' %}",
+      'Tai Chi Movements': "{% static 'images/taichimovements.jpg' %}",
+
+      // Core Exercises
+      'Sit-ups / Crunches': "{% static 'images/situps.jpg' %}",
+      'Russian Twists': "{% static 'images/russiantwists.jpg' %}",
+      'Mountain Climbers': "{% static 'images/mountainclimbers.jpg' %}",
+      'Leg Raises': "{% static 'images/legraises.jpg' %}",
+      'Bicycle Crunches': "{% static 'images/bicyclecrunches.jpg' %}",
+
+      // Mobility Exercises
       'Arm Circles': "{% static 'images/armcircles.jpg' %}",
       'Hip Circles': "{% static 'images/hipcircles.jpg' %}",
       'Shoulder Rolls': "{% static 'images/shoulderolls.jpg' %}",
       'Ankle Circles': "{% static 'images/anklecircles.jpg' %}",
       'Dynamic Lunges': "{% static 'images/dynamiclunges.jpg' %}",
 
+      // Endurance Exercises
+      'Long-distance Running': "{% static 'images/longdistancerunning.jpg' %}",
+      'Rowing': "{% static 'images/rowing.jpg' %}",
+      'Stair Climbing': "{% static 'images/stairclimbing.jpg' %}",
+      'Hiking': "{% static 'images/hiking.jpg' %}",
+      'Swimming Laps': "{% static 'images/swimminglaps.jpg' %}",
       
-
+      'placeholder': "{% static 'images/placeholder.png' %}",
     };
+
     exerciseGrid.innerHTML = '';
     filteredExercises.forEach(ex => {
       const card = document.createElement("div");
       card.className = "exercise-card";
       card.dataset.id = ex.id;
       card.dataset.name = ex.name;
-      const iconUrl = iconMap[ex.name] || "{% static 'images/placeholder.png' %}";
-      card.innerHTML = `<img src="${iconUrl}" alt="${ex.name}"><p>${ex.name}</p>`;
+      // Use fallback image if specific image is not found
+      const iconUrl = iconMap[ex.name] || "{% static 'images/placeholder.png' %}"; 
+      card.innerHTML = `<img src="${iconUrl}" alt="${ex.name}" onerror="this.onerror=null; this.src='{% static 'images/placeholder.png' %}'"><p>${ex.name}</p>`;
       exerciseGrid.appendChild(card);
     });
+    
+    // Reset selected IDs when category changes
+    activityForm.dataset.selectedExerciseIds = JSON.stringify([]);
   }
+
 
   exerciseGrid.addEventListener("click", function (e) {
     const card = e.target.closest('.exercise-card');
@@ -350,9 +390,11 @@
       card.classList.toggle('selected');
       const selectedCards = document.querySelectorAll('.exercise-card.selected');
       const selectedIds = Array.from(selectedCards).map(c => c.dataset.id);
+      // Update the form's data attribute with the currently selected exercise IDs
       activityForm.dataset.selectedExerciseIds = JSON.stringify(selectedIds);
     }
   });
+
 
   async function fetchActivities() {
     const token = localStorage.getItem("token");
@@ -370,6 +412,7 @@
         } else {
           activities.forEach(activity => {
             const exerciseNames = activity.exercise_types.map(ex => ex.name).join(', ');
+            // FIX 3: Use template literal for table row creation
             const row = `
               <tr>
                 <td>${new Date(activity.date).toLocaleDateString()}</td>
@@ -377,7 +420,8 @@
                 <td>${activity.distance || '0'}</td>
                 <td>${activity.duration || '0'}</td>
                 <td>${activity.calories_burned || '0'}</td>
-              </tr>`;
+              </tr>
+            `;
             activitiesTableBody.innerHTML += row;
           });
         }
@@ -390,24 +434,33 @@
     }
   }
 
+
   activityForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     const token = localStorage.getItem("token");
     const selectedExerciseIds = JSON.parse(activityForm.dataset.selectedExerciseIds || '[]');
-    if (!token || selectedExerciseIds.length === 0) {
-      showMessage("Please select at least one activity and login first!", 'error');
+    
+    if (!token) {
+      showMessage("You must be logged in to log an activity.", 'error');
       return;
     }
+
+    if (selectedExerciseIds.length === 0) {
+      showMessage("Please select at least one activity!", 'error');
+      return;
+    }
+    
     const distance = document.getElementById("distance").value;
     const caloriesBurned = document.getElementById("caloriesBurned").value;
     const duration = document.getElementById("duration").value;
     const date = new Date().toISOString().split('T')[0];
+    
     try {
       const response = await fetch("/api/activities/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Token ${token}`
+          "Authorization": `Token ${token}` // Use template literal for Token header
         },
         body: JSON.stringify({
           exercise_types_ids: selectedExerciseIds.map(id => parseInt(id)),
@@ -417,12 +470,16 @@
           date: date
         })
       });
+      
       if (response.ok) {
         showMessage("Activity logged successfully!", 'success');
         activityForm.reset();
         document.querySelectorAll('.exercise-card.selected').forEach(card => card.classList.remove('selected'));
         delete activityForm.dataset.selectedExerciseIds;
+        
         fetchActivities();
+        
+        // Redirect after a slight delay
         setTimeout(() => {
           window.location.href = "{% url 'dashboard_page' %}";
         }, 2000);
@@ -430,12 +487,14 @@
         const errorData = await response.json();
         const errorMessage = Object.values(errorData).flat().join(' ');
         showMessage(`Failed to log activity: ${errorMessage}`, 'error');
+        console.log("Activity log failure details:", errorData);
       }
     } catch (error) {
-      //console.error("Error logging activity:", error);
-      //showMessage("An error occurred while logging the activity.", 'error');
+      console.error("An error occurred during activity submission:", error);
+      showMessage("An error occurred while logging the activity.", 'error');
     }
   });
+
 
   document.addEventListener('DOMContentLoaded', () => {
     populateExercises();
