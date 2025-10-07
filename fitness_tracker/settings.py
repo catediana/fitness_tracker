@@ -3,6 +3,9 @@ Django settings for task_manager_project project.
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 import environ
 import os
 import dj_database_url
@@ -23,10 +26,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS",
-    default=["127.0.0.1", "localhost", "fitness-tracker-api-8a07.onrender.com"]
-)
+ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -49,11 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Local app
     'tracker',
-
-    # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
