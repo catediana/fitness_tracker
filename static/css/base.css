@@ -16,11 +16,12 @@ body{
     line-height:1.6;
 
     background-image:
-    linear-gradient(rgba(40,65,57,.82),rgba(40,65,57,.82)),
-    url("../images/fitness-bg.jpg");
+      linear-gradient(rgba(40,65,57,.45), rgba(40,65,57,.45)),
+      url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&q=80");
 
     background-size:cover;
     background-position:center;
+    background-repeat:no-repeat;
     background-attachment:fixed;
 }
 

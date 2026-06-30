@@ -1,0 +1,224 @@
+/* =====================================================
+   FORM WRAPPER
+===================================================== */
+
+.form-container{
+    max-width:700px;
+    margin:2rem auto;
+    padding:2rem;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:20px;
+}
+
+.onboarding-wrapper{
+    padding:2rem;
+}
+
+/* =====================================================
+   FORM HEADINGS
+===================================================== */
+
+.form-container h1,
+.form-container h2{
+
+    text-align:center;
+    margin-bottom:2rem;
+
+}
+
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+.form-group{
+
+    margin-bottom:1.5rem;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:.5rem;
+
+    font-weight:600;
+
+    color:var(--text-primary);
+
+}
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+
+    padding:.9rem 1rem;
+
+    background:var(--bg-dark);
+
+    border:1px solid var(--border);
+
+    color:var(--text-primary);
+
+    border-radius:12px;
+
+    transition:var(--transition);
+
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:var(--secondary);
+
+}
+
+/* =====================================================
+   HEIGHT / WEIGHT ROW
+===================================================== */
+
+.units-group{
+
+    display:flex;
+
+    gap:1rem;
+
+}
+
+.units-group input{
+
+    flex:1;
+
+}
+
+.units-group select{
+
+    width:120px;
+
+}
+
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
+
+.profile-photo-preview{
+
+    margin-top:1rem;
+
+    width:150px;
+
+    height:150px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    display:none;
+
+    border:4px solid var(--secondary);
+
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.submit-btn{
+
+    width:100%;
+
+    padding:1rem;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--secondary);
+
+    color:white;
+
+    font-size:1rem;
+
+    font-weight:600;
+
+    transition:var(--transition);
+
+}
+
+.submit-btn:hover{
+
+    background:var(--accent);
+
+}
+
+.submit-btn:disabled{
+
+    opacity:.7;
+
+    cursor:not-allowed;
+
+}
+
+/* =====================================================
+   ERRORS
+===================================================== */
+
+.error{
+
+    border-color:#ff5b5b !important;
+
+}
+
+.error-message{
+
+    margin-top:.4rem;
+
+    color:#ff6b6b;
+
+    font-size:.85rem;
+
+    display:none;
+
+}
+
+/* =====================================================
+   SUCCESS / ERROR MESSAGE
+===================================================== */
+
+.message-container{
+
+    margin-top:1.5rem;
+
+    padding:1rem;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+.message-success{
+
+    background:#1e5631;
+
+    color:white;
+
+}
+
+.message-error{
+
+    background:#7d1e1e;
+
+    color:white;
+
+}
