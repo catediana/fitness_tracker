@@ -5,11 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GoalFlex</title>
-  <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.1" />
   {% block extra_styles %}{% endblock %}
 </head>
 <body>
-  <button class="menu-toggle" id="menuToggle" aria-controls="sideNav" aria-expanded="false" aria-label="Toggle navigation menu">☰</button>
+  <button class="menu-toggle" id="menuToggle" aria-controls="sideNav" aria-expanded="false" aria-label="Toggle navigation menu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
   <div class="overlay" id="overlay" tabindex="-1"></div>
   <nav class="sidenav" id="sideNav" aria-label="Main navigation">
     <div class="site-info-sidenav">
@@ -24,21 +25,21 @@
     <ul>
       <li>
         <button class="nav-item" aria-expanded="false" aria-controls="dashboardSubmenu" id="dashboardToggle" aria-haspopup="true">
-          <span class="nav-icon">📊</span>
+          <span class="nav-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
-          <span class="nav-arrow" aria-hidden="true">▸</span>
+          <span class="nav-arrow" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
         </button>
         <ul class="submenu" id="dashboardSubmenu" aria-labelledby="dashboardToggle">
           <li><button class="nav-subitem" data-target="profileSection" tabindex="-1">
-            <span class="nav-icon">👤</span>
+            <span class="nav-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></span>
             <span class="nav-text">Profile</span>
           </button></li>
           <li><button class="nav-subitem" data-target="statusSection" tabindex="-1">
-            <span class="nav-icon">📈</span>
+            <span class="nav-icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span>
             <span class="nav-text">Status</span>
           </button></li>
           <li><button class="nav-subitem" data-target="goalSection" tabindex="-1">
-            <span class="nav-icon">🎯</span>
+            <span class="nav-icon"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></span>
             <span class="nav-text">Goal</span>
           </button></li>
         </ul>
@@ -46,7 +47,7 @@
 
       <li>
         <a href="{% url 'activities_page' %}" class="nav-item" id="activitiesLink">
-          <span class="nav-icon">🏃‍♂️</span>
+          <span class="nav-icon"><i class="fa-solid fa-person-running" aria-hidden="true"></i></span>
           <span class="nav-text">Activities</span>
         </a>
       </li>
@@ -55,7 +56,7 @@
         <form action="{% url 'logout' %}" method="post" class="logout-form">
           {% csrf_token %}
           <button type="submit" class="nav-item">
-            <span class="nav-icon">🚪</span>
+            <span class="nav-icon"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i></span>
             <span class="nav-text">Logout</span>
           </button>
         </form>
@@ -141,19 +142,26 @@
 
       const dashboardToggle = document.getElementById("dashboardToggle");
       const dashboardSubmenu = document.getElementById("dashboardSubmenu");
-      const navArrow = dashboardToggle.querySelector(".nav-arrow");
+      const navArrow = dashboardToggle.querySelector(".nav-arrow i");
+
+      function setNavArrowExpanded(expanded) {
+        if (!navArrow) return;
+        navArrow.classList.remove("fa-chevron-right", "fa-chevron-down");
+        navArrow.classList.add(expanded ? "fa-chevron-down" : "fa-chevron-right");
+      }
+
       dashboardSubmenu.querySelectorAll("button.nav-subitem").forEach(item => item.tabIndex = -1);
       dashboardToggle.addEventListener("click", () => {
         const expanded = dashboardToggle.getAttribute("aria-expanded") === "true";
         if (expanded) {
           dashboardToggle.setAttribute("aria-expanded", "false");
           dashboardSubmenu.classList.remove("open");
-          if (navArrow) navArrow.textContent = "▸";
+          setNavArrowExpanded(false);
           dashboardSubmenu.querySelectorAll("button.nav-subitem").forEach(i => i.tabIndex = -1);
         } else {
           dashboardToggle.setAttribute("aria-expanded", "true");
           dashboardSubmenu.classList.add("open");
-          if (navArrow) navArrow.textContent = "▾";
+          setNavArrowExpanded(true);
           dashboardSubmenu.querySelectorAll("button.nav-subitem").forEach(i => i.tabIndex = 0);
         }
       });
@@ -183,7 +191,7 @@
         if (path.includes("dashboard")) {
           dashboardToggle.setAttribute("aria-expanded", "true");
           dashboardSubmenu.classList.add("open");
-          if (navArrow) navArrow.textContent = "▾";
+          setNavArrowExpanded(true);
           dashboardSubmenu.querySelectorAll("button.nav-subitem").forEach(i => i.tabIndex = 0);
         }
       }
