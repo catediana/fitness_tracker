@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GoalFlex</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.1" />
+  <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.2" />
   {% block extra_styles %}{% endblock %}
 </head>
-<body>
-  <button class="menu-toggle" id="menuToggle" aria-controls="sideNav" aria-expanded="false" aria-label="Toggle navigation menu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+<body class="app-body">
   <div class="overlay" id="overlay" tabindex="-1"></div>
+
   <nav class="sidenav" id="sideNav" aria-label="Main navigation">
     <div class="site-info-sidenav">
       <div class="logo-container">
@@ -21,7 +21,7 @@
       <p>Built By Sweat. Powered by you</p>
       <div class="brand-accent"></div>
     </div>
-    
+
     <ul>
       <li>
         <button class="nav-item" aria-expanded="false" aria-controls="dashboardSubmenu" id="dashboardToggle" aria-haspopup="true">
@@ -65,12 +65,53 @@
   </nav>
 
   <div class="main-wrapper">
-    <div class="main-content">
+    <header class="app-topbar" role="banner">
+      <div class="app-topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-controls="sideNav" aria-expanded="false" aria-label="Toggle navigation menu">
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+        <div class="app-title">
+          <h1 class="app-title-text">{% block page_title %}Dashboard{% endblock %}</h1>
+        </div>
+      </div>
+
+      <div class="app-topbar-right">
+        <div class="app-search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" placeholder="Search" aria-label="Search" />
+        </div>
+
+        <button class="icon-btn" type="button" aria-label="Notifications">
+          <i class="fa-regular fa-bell" aria-hidden="true"></i>
+        </button>
+
+        <div class="profile-menu" id="profileMenu">
+          <button class="profile-btn" type="button" aria-haspopup="menu" aria-expanded="false" id="profileMenuButton">
+            <span class="avatar" aria-hidden="true"></span>
+            <span class="profile-btn-text">My Account</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="profile-dropdown is-hidden" role="menu" aria-label="Profile menu" id="profileDropdown">
+            <a class="profile-dropdown-item" role="menuitem" href="{% url 'dashboard_page' %}">
+              <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+              <span>Dashboard</span>
+            </a>
+            <a class="profile-dropdown-item" role="menuitem" href="{% url 'activities_page' %}">
+              <i class="fa-solid fa-person-running" aria-hidden="true"></i>
+              <span>Activities</span>
+            </a>
+          </div>
+        </div>
+
+        {% block app_header_extras %}{% endblock %}
+      </div>
+    </header>
+
+    <div class="main-content app-main-content">
       {% block content %}{% endblock %}
     </div>
-    <footer>
-      <p>&copy; 2025 GoalFlex | <a href="#">Privacy Policy</a></p>
-    </footer>
+
+   
   </div>
 
   <script>
@@ -196,6 +237,29 @@
         }
       }
       syncSubmenuByUrl();
+
+      // Profile dropdown (pure UI, no backend dependency)
+      const profileBtn = document.getElementById("profileMenuButton");
+      const dropdown = document.getElementById("profileDropdown");
+      function closeDropdown() {
+        if (!dropdown) return;
+        dropdown.classList.add("is-hidden");
+        profileBtn?.setAttribute("aria-expanded", "false");
+      }
+      profileBtn?.addEventListener("click", () => {
+        const isOpen = dropdown && !dropdown.classList.contains("is-hidden");
+        if (!dropdown) return;
+        dropdown.classList.toggle("is-hidden");
+        profileBtn.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      });
+      document.addEventListener("click", (e) => {
+        if (!dropdown || !profileBtn) return;
+        const menu = document.getElementById("profileMenu");
+        if (menu && !menu.contains(e.target)) closeDropdown();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeDropdown();
+      });
     });
   </script>
 

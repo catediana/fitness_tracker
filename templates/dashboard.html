@@ -1,5 +1,7 @@
-{% extends 'base_app.html' %}
+{% extends 'layouts/app_base.html' %}
 {% load static %}
+
+{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="dashboard-page">
@@ -296,3 +298,4 @@
   }
 </script>
 {% endblock script %}
+

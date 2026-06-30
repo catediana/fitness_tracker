@@ -1,5 +1,7 @@
-{% extends 'base_app.html' %}
+{% extends 'layouts/app_base.html' %}
 {% load static %}
+
+{% block page_title %}Onboarding{% endblock %}
 
 {% block content %}
 <div class="onboarding-wrapper">
@@ -205,3 +207,4 @@
   });
 </script>
 {% endblock %}
+

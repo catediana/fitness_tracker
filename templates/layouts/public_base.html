@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoalFlex</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.1">
+    <link rel="stylesheet" href="{% static 'css/shared_styles.css' %}?v=6.2">
+    {% block extra_styles %}{% endblock %}
 </head>
-<body>
+<body class="public-body">
     <nav class="top-nav">
         <div class="site-info">
             <h1>GoalFlex</h1>
@@ -28,5 +29,7 @@
     <footer>
         <p>&copy; 2025 GoalFlex | <a href="#">Privacy Policy</a></p>
     </footer>
+
+    {% block script %}{% endblock %}
 </body>
 </html>
