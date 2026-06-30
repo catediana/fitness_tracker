@@ -1,230 +1,10 @@
 {% extends 'base_app.html' %}
 {% load static %}
 
-{% block extra_styles %}
-<style>
-  /* Dashboard container styles */
-  .dashboard-container {
-    background: rgba(40, 65, 57, 0.95);;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    width: 85%;
-    max-width: 1000px;
-    margin: 2rem auto;
-    color: #F5F7F7;
-  }
-  h1 {
-    color: #F5F7F7;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  /* Profile summary */
-  .profile-summary {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid rgba(245, 247, 247, 0.3);
-    padding-bottom: 1rem;
-    text-align: center;
-  }
-  .profile-summary h2 {
-    color: #F8E794;
-    margin-bottom: 1rem;
-  }
-  /* Profile picture */
-  .profile-picture-container {
-    margin-bottom: 20px;
-  }
-  .profile-pic {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #B86830;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  /* Stats cards */
-  .stats-cards {
-    display: flex;
-    justify-content: space-around;
-    gap: 15px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-  }
-  .stat-card {
-    background: rgba(245, 247, 247, 0.15);
-    backdrop-filter: blur(6px);
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    flex: 1;
-    min-width: 160px;
-    margin-bottom: 10px;
-    transition: transform 0.2s;
-    color: #F5F7F7;
-  }
-  .stat-card:hover {
-    transform: translateY(-3px);
-  }
-  .stat-card h3 {
-    margin: 0 0 10px;
-    color: #F8E794;
-  }
-  .stat-card p {
-    font-size: 2em;
-    font-weight: bold;
-    margin: 0;
-    color: #F5F7F7;
-  }
-  /* Goal tracking */
-  .goal-tracking {
-    margin-bottom: 30px;
-    color: #F5F7F7;
-  }
-  .progress-bar {
-    width: 80%;
-    height: 25px;
-    background: rgba(245, 247, 247, 0.2);
-    border-radius: 12.5px;
-    overflow: hidden;
-    margin: 10px auto;
-    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(135deg, #F8E794, #B86830);
-    transition: width 0.5s ease-in-out;
-  }
-  /* Chart */
-  .chart-container {
-    margin-bottom: 30px;
-    position: relative;
-    background: rgba(245, 247, 247, 0.15);
-    backdrop-filter: blur(6px);
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    color: #F5F7F7;
-  }
-  #myChart {
-    max-height: 400px;
-    width: 100%;
-  }
-  .chart-controls {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  .chart-controls button {
-    background: rgba(245, 247, 247, 0.15);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(237, 181, 24, 0.5);
-    color: #F5F7F7;
-    font-weight: bold;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-  }
-  .chart-controls button:hover,
-  .chart-controls button.active {
-    background: #F8E794;
-    color: #000407;
-  }
-  /* Table */
-  .recent-activities {
-    margin-top: 2rem;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    text-align: left;
-    background: rgba(245, 247, 247, 0.15);
-    backdrop-filter: blur(6px);
-    border-radius: 12px;
-    overflow: hidden;
-    color: #F5F7F7;
-  }
-  th, td {
-    padding: 12px;
-    border-bottom: 1px solid rgba(237, 181, 24, 0.3);
-  }
-  th {
-    background: rgba(237, 181, 24, 0.3);
-    color: #F5F7F7;
-  }
-  tr:last-child td {
-    border-bottom: none;
-  }
-  /* Sections hidden by default */
-  #profileSection,
-  #statsSection,
-  #goalSection {
-    display: none;
-  }
-  /* Mobile table */
-  @media (max-width: 600px) {
-    table { border: 0; }
-    table thead { display: none; }
-    table tr {
-      display: block;
-      margin-bottom: 1rem;
-      background: rgba(245, 247, 247, 0.15);
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    }
-    table td {
-      display: block;
-      text-align: right;
-      font-size: 0.9rem;
-      border-bottom: 1px solid rgba(237, 181, 24, 0.3);
-      position: relative;
-      padding-left: 50%;
-      color: #F5F7F7;
-    }
-    table td:last-child { border-bottom: 0; }
-    table td::before {
-      content: attr(data-label);
-      position: absolute;
-      left: 1rem;
-      font-weight: bold;
-      color: #F8E794;
-      text-align: left;
-    }
-  }
-  /* Button */
-  .button-link button {
-    padding: 12px 20px;
-    margin-top: 20px;
-    background: linear-gradient(135deg, #EDB518, #f7c94c);
-    color: #000407;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  .button-link button:hover {
-    background: linear-gradient(135deg, #284139, #1a2d26);
-    color: #F5F7F7;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-  }
-  .button-link {
-    text-decoration: none;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="dashboard-container">
+<div class="dashboard-page">
   <h1 id="welcomeHeading">Welcome!</h1>
-  <!-- Profile Section -->
+
   <section id="profileSection" class="dashboard-section">
     <div class="profile-summary">
       <h2>Your Profile</h2>
@@ -255,7 +35,7 @@
       </div>
     </div>
   </section>
-  <!-- Stats Section -->
+
   <section id="statsSection" class="dashboard-section">
     <div class="stats-cards">
       <div class="stat-card">
@@ -272,7 +52,7 @@
       </div>
     </div>
   </section>
-  <!-- Goal Section -->
+
   <section id="goalSection" class="dashboard-section">
     <div class="goal-tracking">
       <h3>Weekly Calorie Goal</h3>
@@ -282,7 +62,7 @@
       <p><span id="goalProgressText">Loading...</span></p>
     </div>
   </section>
-  <!-- Chart Section -->
+
   <div class="chart-container">
     <div class="chart-header">
       <h3>Activity Progress</h3>
@@ -294,7 +74,7 @@
     </div>
     <canvas id="myChart"></canvas>
   </div>
-  <!-- Recent Activities Section -->
+
   <div class="recent-activities">
     <h3>Recent Activities</h3>
     <table id="recentActivitiesTable">
@@ -310,6 +90,7 @@
       <tbody></tbody>
     </table>
   </div>
+
   <a href="{% url 'activities_page' %}" class="button-link">
     <button>+ Add New Activity</button>
   </a>
@@ -332,7 +113,7 @@
 
     const dashboardSubitems = document.querySelectorAll("#dashboardSubmenu button.nav-subitem");
     dashboardSubitems.forEach(btn => btn.classList.remove('active'));
-    if(dashboardSubitems.length > 0) dashboardSubitems[0].classList.add('active');
+    if (dashboardSubitems.length > 0) dashboardSubitems[0].classList.add('active');
 
     dashboardSubitems.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -483,9 +264,10 @@
         datasets: [{
           label: 'Calories Burned',
           data: data,
-          backgroundColor: 'rgba(237, 181, 24, 0.6)',
-          borderColor: '#B86830',
-          borderWidth: 1
+          backgroundColor: '#D4AF37',
+          borderColor: '#B8962E',
+          borderWidth: 1,
+          borderRadius: 6
         }]
       },
       options: {
@@ -496,11 +278,11 @@
             beginAtZero: true,
             min: 0,
             max: 3000,
-            grid: { color: 'rgba(245, 247, 247, 0.2)' },
+            grid: { color: '#3A4449' },
             ticks: { color: '#F5F7F7' }
           },
           x: {
-            grid: { color: 'rgba(245, 247, 247, 0.2)' },
+            grid: { color: '#3A4449' },
             ticks: { color: '#F5F7F7' }
           }
         },

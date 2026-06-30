@@ -9,6 +9,7 @@ from tracker import views as tracker_views
 urlpatterns = [
     # Frontend routes
     path('', tracker_views.index_view, name='index'),
+    path('test-image/', tracker_views.test_image_view, name='test_image'),
     path('register/', tracker_views.register_view, name='register_page'),
     path('login/', tracker_views.login_view, name='login_page'),
     path('dashboard/', tracker_views.dashboard_view, name='dashboard_page'),

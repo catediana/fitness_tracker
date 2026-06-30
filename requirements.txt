@@ -13,7 +13,6 @@ constantly==23.10.4
 cryptography==44.0.2
 daphne==4.1.2
 dj-database-url==2.3.0
-djando==0.2
 Django==5.1.6
 django-ckeditor==6.7.3
 django-cloudinary-storage==0.3.0
@@ -60,7 +59,7 @@ sqlparse==0.5.3
 trio==0.30.0
 trio-websocket==0.12.2
 Twisted==24.11.0
-txaio==23.1.1
+txaio==26.6.1
 typing_extensions==4.14.1
 tzdata==2025.1
 urllib3==2.5.0

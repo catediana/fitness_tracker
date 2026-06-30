@@ -17,6 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialize environment variables
 env = environ.Env()
 env_path = os.path.join(BASE_DIR, '.env')
+if os.path.exists(env_path):
+    env.read_env(env_path)
 
 
 

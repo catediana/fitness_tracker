@@ -45,6 +45,9 @@ def activities_view(request):
 def onboarding_view(request):
     return render(request, "onboarding_form.html")
 
+def test_image_view(request):
+    return render(request, "test_image.html")
+
 
 # ---------------- 1. Register view ----------------
 class RegisterView(generics.CreateAPIView):
