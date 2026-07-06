@@ -103,12 +103,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fitness_tracker.wsgi.application'
 
 # Database configuration
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"),
-        conn_max_age=600,
-    )
-}
+DATABASE_URL = env("DATABASE_URL", default="")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -151,4 +158,4 @@ cloudinary.config(
 )
 
 # Optional: If you’re using CLOUDINARY_URL in your .env, you can still keep this:
-CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
+CLOUDINARY_URL = env("CLOUDINARY_URL", default="")
