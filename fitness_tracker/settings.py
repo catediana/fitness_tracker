@@ -22,13 +22,13 @@ if os.path.exists(env_path):
 
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY',
     'django-insecure-18@8x$mb@3ltd#td8cx7wn*7i=pdxytzpj3zixhp$_y!lz)7p^'
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
@@ -132,30 +132,30 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# --- Static Files ---
+# Static Files 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# --- CKEditor Upload Path ---
+# CKEditor Upload Path 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
-# --- Media Files ---
+#  Media Files 
 if DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
-    # Use Cloudinary in production
+    # Cloudinary in production
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     MEDIA_URL = '/media/'
 
-# --- Cloudinary Configuration ---
+#  Cloudinary Configuration 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dkt12hzdm'),
     api_key=os.environ.get('CLOUDINARY_API_KEY', '637419457344564'),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'sepBR6zDqk2znBELIfXVuS5Ew34'),
 )
 
-# Optional: If you’re using CLOUDINARY_URL in your .env, you can still keep this:
+
 CLOUDINARY_URL = env("CLOUDINARY_URL", default="")
