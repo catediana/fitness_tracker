@@ -1,0 +1,757 @@
+/* =====================================================
+   APP LAYOUT
+===================================================== */
+
+.app-body{
+    min-height:100vh;
+}
+
+.main-wrapper{
+    margin-left:var(--sidebar-width);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.app-main-content{
+    flex:1;
+    padding:2rem;
+}
+
+footer{
+    padding:1rem 2rem;
+    border-top:1px solid var(--border);
+    text-align:center;
+    color:var(--text-secondary);
+    font-size:.9rem;
+}
+
+footer a{
+    color:var(--accent);
+}
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidenav{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:var(--sidebar-width);
+    height:100vh;
+
+    background:var(--bg-dark);
+
+    border-right:1px solid var(--border);
+
+    display:flex;
+    flex-direction:column;
+
+    z-index:1000;
+
+    transition:var(--transition);
+}
+
+.site-info-sidenav{
+
+    padding:2rem;
+
+    text-align:center;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.logo-container{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:.8rem;
+
+    margin-bottom:.7rem;
+
+}
+
+.logo-icon{
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        var(--secondary),
+        var(--accent)
+    );
+
+}
+
+.site-info-sidenav h1{
+
+    color:white;
+
+    font-size:1.8rem;
+
+}
+
+.site-info-sidenav p{
+
+    font-size:.85rem;
+
+    color:var(--text-secondary);
+
+}
+
+.brand-accent{
+
+    width:70px;
+
+    height:3px;
+
+    background:var(--secondary);
+
+    margin:1rem auto 0;
+
+    border-radius:30px;
+
+}
+.sidenav ul{
+
+    list-style:none;
+
+    margin-top:2rem;
+
+}
+
+.nav-item,
+.nav-subitem{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+    padding:1rem 1.5rem;
+
+    color:white;
+
+    background:none;
+
+    border:none;
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+}
+
+.nav-item:hover,
+.nav-subitem:hover{
+
+    background:var(--primary-light);
+
+}
+
+.nav-icon{
+
+    width:25px;
+
+    text-align:center;
+
+}
+
+.nav-text{
+
+    flex:1;
+
+}
+
+.nav-arrow{
+
+    font-size:.8rem;
+
+}
+/* =====================================================
+   SIDEBAR SUBMENU
+===================================================== */
+
+.submenu{
+    list-style:none;
+    margin:0;
+    padding-left:1rem;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s ease;
+}
+
+.submenu.open{
+    max-height:300px;
+}
+
+.nav-subitem{
+    font-size:.92rem;
+    color:var(--text-secondary);
+}
+
+.nav-subitem.active{
+    background:var(--primary-light);
+    color:white;
+}
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.app-topbar{
+
+    height:72px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 2rem;
+
+    background:var(--bg-dark);
+
+    border-bottom:1px solid var(--border);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:900;
+
+}
+
+.app-topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1.5rem;
+
+}
+
+.app-title-text{
+
+    color:white;
+
+    font-size:1.6rem;
+
+    font-weight:700;
+
+}
+
+.app-topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+}
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.app-search{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.75rem;
+
+    background:var(--bg-light);
+
+    padding:.6rem 1rem;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+}
+
+.app-search input{
+
+    background:none;
+
+    border:none;
+
+    outline:none;
+
+    color:white;
+
+    width:180px;
+
+}
+
+.app-search i{
+
+    color:var(--text-secondary);
+
+}
+
+/* =====================================================
+   ICON BUTTONS
+===================================================== */
+
+.icon-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:var(--bg-light);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.icon-btn:hover{
+
+    background:var(--primary-light);
+
+}
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.profile-menu{
+
+    position:relative;
+
+}
+
+.profile-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.8rem;
+
+    border:none;
+
+    background:var(--bg-light);
+
+    color:white;
+
+    padding:.5rem 1rem;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+.avatar{
+
+    width:36px;
+
+    height:36px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        var(--secondary),
+        var(--accent)
+    );
+
+}
+
+.profile-dropdown{
+
+    position:absolute;
+
+    top:110%;
+
+    right:0;
+
+    width:220px;
+
+    background:var(--bg-dark);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.35);
+
+}
+
+.profile-dropdown.is-hidden{
+
+    display:none;
+
+}
+
+.profile-dropdown-item{
+
+    display:flex;
+
+    gap:.8rem;
+
+    align-items:center;
+
+    padding:1rem;
+
+    text-decoration:none;
+
+    color:white;
+
+    transition:var(--transition);
+
+}
+
+.profile-dropdown-item:hover{
+
+    background:var(--primary-light);
+
+}
+
+/* =====================================================
+   MENU BUTTON
+===================================================== */
+
+.menu-toggle{
+
+    display:none;
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:var(--bg-light);
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:999;
+
+}
+
+.overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.app-topbar{
+    height:70px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 2rem;
+
+    background:var(--bg-dark);
+
+    border-bottom:1px solid var(--border);
+
+    position:sticky;
+    top:0;
+
+    z-index:900;
+}
+
+.app-topbar-left{
+    display:flex;
+    align-items:center;
+    gap:1.5rem;
+}
+
+.app-title h1{
+    margin:0;
+    color:white;
+    font-size:1.5rem;
+}
+
+.app-topbar-right{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+}
+
+
+/* =====================================================
+   Toggle menu
+===================================================== */
+.menu-toggle{
+
+    width:45px;
+    height:45px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:var(--primary);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:1rem;
+
+}
+
+.menu-toggle:hover{
+
+    background:var(--secondary);
+
+}
+
+
+/* =====================================================
+   search box
+===================================================== */
+
+.app-search{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.7rem;
+
+    background:var(--bg-card);
+
+    padding:.6rem 1rem;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+}
+
+.app-search i{
+
+    color:var(--text-secondary);
+
+}
+
+.app-search input{
+
+    border:none;
+
+    background:transparent;
+
+    color:white;
+
+    outline:none;
+
+    width:180px;
+
+}
+
+.app-search input::placeholder{
+
+    color:var(--text-secondary);
+
+}
+
+
+/* =====================================================
+   notification button
+===================================================== */
+
+.icon-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:10px;
+
+    border:none;
+
+    background:var(--bg-card);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.icon-btn:hover{
+
+    background:var(--primary);
+
+}
+
+/* =====================================================
+   profile menu
+===================================================== */
+.profile-menu{
+
+    position:relative;
+
+}
+
+.profile-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.8rem;
+
+    padding:.6rem 1rem;
+
+    background:var(--bg-card);
+
+    border:none;
+
+    color:white;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.profile-btn:hover{
+
+    background:var(--primary);
+
+}
+
+.avatar{
+
+    width:35px;
+
+    height:35px;
+
+    border-radius:50%;
+
+    background:var(--secondary);
+
+}
+/* =====================================================
+   dropdowns
+===================================================== */
+.profile-dropdown{
+
+    position:absolute;
+
+    right:0;
+
+    top:110%;
+
+    min-width:200px;
+
+    background:var(--bg-dark);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+}
+
+.profile-dropdown.is-hidden{
+
+    display:none;
+
+}
+
+.profile-dropdown-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+    padding:1rem;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+}
+
+.profile-dropdown-item:hover{
+
+    background:var(--primary-light);
+
+}

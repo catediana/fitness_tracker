@@ -1,0 +1,183 @@
+/* =====================================================
+   TABLETS
+===================================================== */
+
+@media (max-width:1024px){
+
+    .main-wrapper{
+        margin-left:0;
+    }
+
+    .sidenav{
+
+        transform:translateX(-100%);
+
+    }
+
+    .sidenav.open{
+
+        transform:translateX(0);
+
+    }
+
+    .overlay{
+
+        position:fixed;
+
+        inset:0;
+
+        background:rgba(0,0,0,.5);
+
+        z-index:999;
+
+        display:none;
+
+    }
+
+    .overlay.active{
+
+        display:block;
+
+    }
+
+}
+
+/* =====================================================
+   SMALL TABLETS
+===================================================== */
+
+@media (max-width:768px){
+
+    .app-topbar{
+
+        padding:1rem;
+
+        flex-wrap:wrap;
+
+        gap:1rem;
+
+        height:auto;
+
+    }
+
+    .app-topbar-right{
+
+        width:100%;
+
+        justify-content:space-between;
+
+        flex-wrap:wrap;
+
+    }
+
+    .app-search{
+
+        width:100%;
+
+    }
+
+    .app-search input{
+
+        width:100%;
+
+    }
+
+    .stats-cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .units-group{
+
+        flex-direction:column;
+
+    }
+
+    .units-group select{
+
+        width:100%;
+
+    }
+
+    .form-container{
+
+        padding:1.5rem;
+
+    }
+
+    .app-main-content{
+
+        padding:1.5rem;
+
+    }
+
+}
+
+/* =====================================================
+   PHONES
+===================================================== */
+
+@media (max-width:480px){
+
+    h1{
+
+        font-size:1.8rem;
+
+    }
+
+    h2{
+
+        font-size:1.4rem;
+
+    }
+
+    .profile-btn-text{
+
+        display:none;
+
+    }
+
+    .app-topbar{
+
+        padding:.75rem;
+
+    }
+
+    .menu-toggle{
+
+        width:42px;
+        height:42px;
+
+    }
+
+    .profile-pic{
+
+        width:110px;
+        height:110px;
+
+    }
+
+    .profile-photo-preview{
+
+        width:110px;
+        height:110px;
+
+    }
+
+    .form-container{
+
+        margin:1rem;
+
+        padding:1.25rem;
+
+    }
+
+    .goal-tracking,
+    .profile-summary{
+
+        padding:1.5rem;
+
+    }
+
+}

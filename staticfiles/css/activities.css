@@ -1,0 +1,281 @@
+/* =====================================================
+   ACTIVITIES PAGE
+===================================================== */
+
+.activities-page{
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+    max-width:1400px;
+    margin:0 auto;
+    animation:fadeIn .35s ease;
+}
+
+.activities-page section h1{
+    color:white;
+    margin-bottom:1.5rem;
+}
+
+/* =====================================================
+   LOG ACTIVITY SECTION
+===================================================== */
+
+.log-activity-section{
+    background:var(--bg-light);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:2rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+
+.log-activity-section h3{
+    color:white;
+    margin-bottom:1rem;
+}
+
+/* =====================================================
+   CATEGORY BUTTONS
+===================================================== */
+
+.category-container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin:1.5rem 0 2rem;
+}
+
+.category-button{
+    padding:.85rem 1.5rem;
+    border:none;
+    border-radius:12px;
+    background:var(--primary-light);
+    color:white;
+    cursor:pointer;
+    transition:var(--transition);
+    font-weight:600;
+}
+
+.category-button:hover{
+    background:var(--secondary);
+    color:var(--bg-dark);
+}
+
+.category-button.selected-cat{
+    background:var(--secondary);
+    color:var(--bg-dark);
+}
+
+/* =====================================================
+   EXERCISE GRID
+===================================================== */
+
+.exercise-grid-container{
+    margin-top:2rem;
+}
+
+.exercise-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1.5rem;
+    margin-top:1rem;
+}
+
+/* =====================================================
+   EXERCISE CARD
+===================================================== */
+
+.exercise-card{
+    background:var(--bg-dark);
+    border:2px solid transparent;
+    border-radius:18px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:var(--transition);
+    text-align:center;
+}
+
+.exercise-card:hover{
+    transform:translateY(-6px);
+    border-color:var(--secondary);
+}
+
+.exercise-card.selected{
+    border-color:var(--secondary);
+    box-shadow:0 0 20px rgba(248,231,148,.35);
+    transform:translateY(-6px);
+}
+
+.exercise-card img{
+    width:100%;
+    height:160px;
+    object-fit:cover;
+}
+
+.exercise-card p{
+    padding:1rem;
+    color:white;
+    font-weight:600;
+}
+
+/* =====================================================
+   ACTIVITY FORM
+===================================================== */
+
+.form-panel{
+    margin-top:2rem;
+    background:var(--bg-dark);
+    border-radius:18px;
+    padding:2rem;
+}
+
+.form-panel h3{
+    margin-bottom:1.5rem;
+    color:white;
+}
+
+.form-panel label{
+    display:block;
+    margin-bottom:.5rem;
+    margin-top:1.2rem;
+    color:white;
+    font-weight:600;
+}
+
+.form-panel input{
+    width:100%;
+}
+
+.form-panel button{
+    width:100%;
+    margin-top:2rem;
+}
+
+/* =====================================================
+   HISTORY SECTION
+===================================================== */
+
+.activity-history-section{
+    background:var(--bg-light);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:2rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+#activitiesTable{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:1.5rem;
+}
+
+#activitiesTable thead{
+    background:var(--bg-dark);
+}
+
+#activitiesTable th{
+    padding:1rem;
+    text-align:left;
+    color:white;
+}
+
+#activitiesTable td{
+    padding:1rem;
+    border-top:1px solid var(--border);
+    color:var(--text-secondary);
+}
+
+#activitiesTable tbody tr{
+    transition:var(--transition);
+}
+
+#activitiesTable tbody tr:hover{
+    background:rgba(255,255,255,.03);
+}
+
+/* =====================================================
+   MESSAGE BOX
+===================================================== */
+
+.message-box{
+    padding:1rem;
+    margin-bottom:1.5rem;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.message-box.success{
+    background:rgba(76,175,80,.18);
+    color:#8eff8e;
+}
+
+.message-box.error{
+    background:rgba(220,53,69,.18);
+    color:#ff8a8a;
+}
+
+.message-box.is-hidden{
+    display:none;
+}
+
+/* =====================================================
+   EMPTY TABLE STATE
+===================================================== */
+
+#activitiesTable td[colspan]{
+    text-align:center;
+    padding:3rem;
+    color:var(--text-secondary);
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:768px){
+
+    .activities-page{
+        gap:1.5rem;
+    }
+
+    .exercise-grid{
+        grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    }
+
+    .category-container{
+        justify-content:center;
+    }
+
+    .log-activity-section,
+    .activity-history-section{
+        padding:1.5rem;
+    }
+
+    #activitiesTable{
+        display:block;
+        overflow-x:auto;
+        white-space:nowrap;
+    }
+
+}

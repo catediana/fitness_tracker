@@ -1,0 +1,65 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"Segoe UI",sans-serif;
+    background:var(--primary);
+    color:var(--text-primary);
+    min-height:100vh;
+    line-height:1.6;
+
+    background-image:
+      linear-gradient(rgba(40,65,57,.45), rgba(40,65,57,.45)),
+      url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1920&q=80");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
+
+img{
+    max-width:100%;
+    display:block;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font:inherit;
+    cursor:pointer;
+}
+
+input,
+select,
+textarea,
+button{
+    outline:none;
+}
+
+h1{
+    font-size:2.2rem;
+    font-weight:700;
+}
+
+h2{
+    font-size:1.7rem;
+}
+
+h3{
+    font-size:1.2rem;
+}
+
+p{
+    color:var(--text-secondary);
+}
