@@ -45,9 +45,8 @@
 }
 
 .stat-card p{
-    font-size:2rem;
-    font-weight:700;
-    color:white;
+    color: var(--text-dark);
+
 }
 
 /* =====================================================
@@ -63,10 +62,8 @@
 }
 
 .profile-summary h2{
-    margin-bottom:1.5rem;
-    color:white;
+    color:var(--text-dark);
 }
-
 /* =====================================================
    PROFILE IMAGE
 ===================================================== */

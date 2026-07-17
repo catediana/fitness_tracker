@@ -131,7 +131,7 @@
     font-weight:600;
 }
 
-/* THIS FIXES THE HUGE CHART */
+
 
 .chart-container{
     background:var(--bg-light);
@@ -141,15 +141,16 @@
     margin:2rem 0;
     box-shadow:0 8px 20px rgba(65, 62, 20, 0.15);
 
-    height:420px;
     position:relative;
+    height:420px;
+    overflow:hidden;
 }
 
 .chart-container canvas{
+     display:block;
     width:100% !important;
-    height:100% !important;
-
 }
+
 
 /* =====================================================
    RECENT ACTIVITIES
